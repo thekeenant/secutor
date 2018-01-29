@@ -28,7 +28,7 @@ public class GladiatorView extends AbstractView<Gladiator> {
 
   public GladiatorView(Gladiator gladiator) {
     super(gladiator);
-    head = new HeadView(model.getHead());
+    head = new HeadView(gladiator, model.getHead());
 
     animations = new HashMap<>();
 
@@ -56,8 +56,20 @@ public class GladiatorView extends AbstractView<Gladiator> {
         GameAnimation.split(0.5f, texture, 2, PlayMode.LOOP, new GladiatorLeftLogic(), true, false)
     );
 
-    runningAnimations = new HashMap<>(animations);
+    runningAnimations = new HashMap<>();
 
+
+    texture = new TextureRegion(new Texture(Gdx.files.internal("gladiator_run_down.png")));
+    runningAnimations.put(
+        Direction.DOWN,
+        GameAnimation.split(1f/10f, texture, 5, PlayMode.LOOP, new GladiatorLeftLogic())
+    );
+
+    texture = new TextureRegion(new Texture(Gdx.files.internal("gladiator_run_up.png")));
+    runningAnimations.put(
+        Direction.UP,
+        GameAnimation.split(1f/10f, texture, 5, PlayMode.LOOP, new GladiatorLeftLogic())
+    );
 
     texture = new TextureRegion(new Texture(Gdx.files.internal("gladiator_run_right.png")));
     runningAnimations.put(
@@ -83,7 +95,7 @@ public class GladiatorView extends AbstractView<Gladiator> {
 
     batch.draw(frame, model.getX(), model.getY());
 
-//    headView.render(batch, deltaTime);
+    head.render(batch, deltaTime);
 
     stateTime += deltaTime;
   }

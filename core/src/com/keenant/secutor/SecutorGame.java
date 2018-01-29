@@ -35,6 +35,7 @@ public class SecutorGame extends ApplicationAdapter {
 	  batch = new SpriteBatch();
 
 	  viewport.apply();
+	  camera.zoom = 0.5f;
 
 	  gladiatorView = new GladiatorView(gladiator);
 	  gladiatorController = new GladiatorController(gladiator, gladiatorView);
