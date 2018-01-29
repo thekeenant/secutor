@@ -12,8 +12,8 @@ public class GladiatorLeftLogic implements LogicFunction<GladiatorAnimationState
     Vector2 leftFoot = new Vector2(2, 0);
     Vector2 rightFoot = new Vector2(5, 0);
 
-    Vector2 leftHand = new Vector2(0, 6);
-    Vector2 rightHand = new Vector2(7, 6);
+    Vector2 leftHand = new Vector2(3, 5);
+    Vector2 rightHand = new Vector2(3, 5);
 
     if (index == 1) {
       leftHand.add(0, 1);

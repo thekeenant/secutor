@@ -15,6 +15,11 @@ public class GameAnimation<T> extends TextureAnimation {
   private final LogicFunction<T> logic;
   private final Map<Integer, T> results;
 
+  @Override
+  public String toString() {
+    return getKeyFrames().length + " keyframes";
+  }
+
   public GameAnimation(float frameDuration,
       TextureRegion[] keyFrames,
       PlayMode playMode,
@@ -42,7 +47,8 @@ public class GameAnimation<T> extends TextureAnimation {
     return new GameAnimation<>(frameDuration,
         textures,
         playMode,
-        logic);
+        logic
+    );
   }
 
   public static <T> GameAnimation<T> split(float frameDuration,
