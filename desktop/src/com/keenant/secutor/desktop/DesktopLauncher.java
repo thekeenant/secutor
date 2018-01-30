@@ -9,7 +9,7 @@ public class DesktopLauncher {
     LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
     config.width = 1280;
     config.height = 720;
-    config.backgroundFPS = 0;
+    config.vSyncEnabled = true;
     new LwjglApplication(new SecutorGame(), config);
   }
 }
