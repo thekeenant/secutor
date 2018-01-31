@@ -8,8 +8,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.keenant.secutor.engine.controller.gladiator.GladiatorController;
+import com.keenant.secutor.engine.controller.world.WorldController;
 import com.keenant.secutor.engine.model.gladiator.Gladiator;
+import com.keenant.secutor.engine.model.world.World;
 import com.keenant.secutor.engine.view.gladiator.GladiatorView;
+import com.keenant.secutor.engine.view.world.WorldView;
 
 public class SecutorGame extends ApplicationAdapter {
   // 30fps game
@@ -24,9 +27,11 @@ public class SecutorGame extends ApplicationAdapter {
 
   private float accumulator;
 
-  Gladiator gladiator = new Gladiator();
-  GladiatorView gladiatorView;
-  GladiatorController gladiatorController;
+  World world = new World();
+  WorldView worldView;
+  WorldController worldController;
+
+  Gladiator player;
 
   @Override
   public void create () {
@@ -37,8 +42,13 @@ public class SecutorGame extends ApplicationAdapter {
     viewport.apply();
     camera.zoom = 1f;
 
-    gladiatorView = new GladiatorView(gladiator);
-    gladiatorController = new GladiatorController(gladiator, gladiatorView);
+    worldView = new WorldView(world);
+    worldController = new WorldController(world, worldView);
+
+
+    player = new Gladiator();
+    GladiatorView playerView = new GladiatorView(player);
+    worldController.addController(new GladiatorController(player, playerView));
   }
 
   @Override
@@ -65,7 +75,8 @@ public class SecutorGame extends ApplicationAdapter {
   }
 
   private void update(float deltaTime) {
-    gladiatorController.update(deltaTime);
+    camera.position.set(player.getX(), player.getY(), 0);
+    worldController.update(deltaTime);
   }
 
   private void draw(float deltaTime) {
@@ -74,7 +85,7 @@ public class SecutorGame extends ApplicationAdapter {
 
     batch.begin();
 
-    gladiatorView.render(batch, deltaTime);
+    worldView.render(batch, deltaTime);
 
     batch.end();
   }
