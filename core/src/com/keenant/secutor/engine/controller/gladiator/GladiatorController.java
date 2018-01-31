@@ -26,8 +26,6 @@ public class GladiatorController extends AbstractController<Gladiator, Gladiator
   public void update(float deltaTime) {
     GladiatorAnimationState animationState = view.currentAnimationState();
 
-    Vector2 position = model.getPosition();
-
     movement.x = 0;
     movement.y = 0;
 

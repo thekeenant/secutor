@@ -36,6 +36,7 @@ public class HeadView extends AbstractView<Head> {
       tex = helmetUp;
     if (gladiator.getFacing() == Direction.LEFT)
       tex = helmetLeft;
+
     batch.draw(tex, model.getX(), model.getY());
   }
 }

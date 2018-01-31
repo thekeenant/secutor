@@ -10,6 +10,7 @@ import java.util.Map;
  * uses {@link Animation#frameDuration} and a stateTime to determine which animation to use,
  * this uses it to determine the positions of features in the animation (i.e. on frame 1, the hands
  * are at 0,5 and at frame 2 they are at 0,6).
+ * @param <T> the data object which encapsulates the animation logic
  */
 public class GameAnimation<T> extends TextureAnimation {
   private final AnimationLogic<T> logic;
