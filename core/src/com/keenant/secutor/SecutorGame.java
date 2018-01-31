@@ -28,26 +28,26 @@ public class SecutorGame extends ApplicationAdapter {
   GladiatorView gladiatorView;
   GladiatorController gladiatorController;
 
-	@Override
-	public void create () {
-	  camera = new OrthographicCamera();
-	  viewport = new FitViewport(VIEW_WIDTH, VIEW_HEIGHT, camera);
-	  batch = new SpriteBatch();
+  @Override
+  public void create () {
+    camera = new OrthographicCamera();
+    viewport = new FitViewport(VIEW_WIDTH, VIEW_HEIGHT, camera);
+    batch = new SpriteBatch();
 
-	  viewport.apply();
-	  camera.zoom = 0.5f;
+    viewport.apply();
+    camera.zoom = 1f;
 
-	  gladiatorView = new GladiatorView(gladiator);
-	  gladiatorController = new GladiatorController(gladiator, gladiatorView);
+    gladiatorView = new GladiatorView(gladiator);
+    gladiatorController = new GladiatorController(gladiator, gladiatorView);
   }
 
   @Override
   public void resize(int width, int height) {
-	  viewport.update(width, height);
+    viewport.update(width, height);
   }
 
   @Override
-	public void render () {
+  public void render () {
     float frameTime = Math.min(Gdx.graphics.getDeltaTime(), 0.25f);
     accumulator += frameTime;
 
@@ -62,26 +62,25 @@ public class SecutorGame extends ApplicationAdapter {
 
       accumulator -= TIME_STEP;
     }
-	}
+  }
 
-	private void update(float deltaTime) {
-
-	  gladiatorController.update(deltaTime);
-	}
+  private void update(float deltaTime) {
+    gladiatorController.update(deltaTime);
+  }
 
   private void draw(float deltaTime) {
     camera.update();
-	  batch.setProjectionMatrix(camera.combined);
+    batch.setProjectionMatrix(camera.combined);
 
-	  batch.begin();
+    batch.begin();
 
-	  gladiatorView.render(batch, deltaTime);
+    gladiatorView.render(batch, deltaTime);
 
-	  batch.end();
+    batch.end();
   }
-	
-	@Override
-	public void dispose () {
 
-	}
+  @Override
+  public void dispose () {
+
+  }
 }

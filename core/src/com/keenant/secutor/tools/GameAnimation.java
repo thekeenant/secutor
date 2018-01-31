@@ -12,7 +12,7 @@ import java.util.Map;
  * are at 0,5 and at frame 2 they are at 0,6).
  */
 public class GameAnimation<T> extends TextureAnimation {
-  private final LogicFunction<T> logic;
+  private final AnimationLogic<T> logic;
   private final Map<Integer, T> results;
 
   @Override
@@ -23,7 +23,7 @@ public class GameAnimation<T> extends TextureAnimation {
   public GameAnimation(float frameDuration,
       TextureRegion[] keyFrames,
       PlayMode playMode,
-      LogicFunction<T> logic) {
+      AnimationLogic<T> logic) {
     super(frameDuration, keyFrames);
     setPlayMode(playMode);
     this.logic = logic;
@@ -34,7 +34,7 @@ public class GameAnimation<T> extends TextureAnimation {
       TextureRegion sheet,
       int keyFrames,
       PlayMode playMode,
-      LogicFunction<T> logic,
+      AnimationLogic<T> logic,
       boolean flipX,
       boolean flipY) {
 
@@ -55,7 +55,7 @@ public class GameAnimation<T> extends TextureAnimation {
       TextureRegion sheet,
       int keyFrames,
       PlayMode playMode,
-      LogicFunction<T> logic) {
+      AnimationLogic<T> logic) {
     return split(frameDuration, sheet, keyFrames, playMode, logic, false, false);
   }
 
@@ -80,7 +80,7 @@ public class GameAnimation<T> extends TextureAnimation {
    * @param <T> the return type
    */
   @FunctionalInterface
-  public interface LogicFunction<T> {
+  public interface AnimationLogic<T> {
     T apply(int index);
   }
 }

@@ -1,11 +1,11 @@
-package com.keenant.secutor.engine.view.head;
+package com.keenant.secutor.engine.view.gladiator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.keenant.secutor.engine.model.gladiator.Gladiator;
-import com.keenant.secutor.engine.model.head.Head;
+import com.keenant.secutor.engine.model.gladiator.Head;
 import com.keenant.secutor.engine.view.AbstractView;
 import com.keenant.secutor.world.Direction;
 
@@ -36,6 +36,6 @@ public class HeadView extends AbstractView<Head> {
       tex = helmetUp;
     if (gladiator.getFacing() == Direction.LEFT)
       tex = helmetLeft;
-    batch.draw(tex, model.getPosition().x, model.getPosition().y + 11);
+    batch.draw(tex, model.getX(), model.getY());
   }
 }
