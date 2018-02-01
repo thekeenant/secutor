@@ -2,18 +2,21 @@ package com.keenant.secutor;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.keenant.secutor.engine.controller.gladiator.GladiatorAIController;
-import com.keenant.secutor.engine.controller.gladiator.GladiatorUserController;
+import com.keenant.secutor.engine.controller.gladiator.AIGladiatorController;
+import com.keenant.secutor.engine.controller.gladiator.UserGladiatorController;
 import com.keenant.secutor.engine.controller.world.WorldController;
+import com.keenant.secutor.engine.model.gladiator.AIGladiator;
 import com.keenant.secutor.engine.model.gladiator.Gladiator;
 import com.keenant.secutor.engine.model.world.World;
 import com.keenant.secutor.engine.view.gladiator.GladiatorView;
 import com.keenant.secutor.engine.view.world.WorldView;
+import java.util.Random;
 
 public class SecutorGame extends ApplicationAdapter {
   private static SecutorGame game;
@@ -24,6 +27,7 @@ public class SecutorGame extends ApplicationAdapter {
   private OrthographicCamera camera;
   private Viewport viewport;
   private SpriteBatch batch;
+  private SpriteBatch debug;
 
   World world = new World();
   WorldView worldView;
@@ -45,6 +49,7 @@ public class SecutorGame extends ApplicationAdapter {
     camera = new OrthographicCamera();
     viewport = new FitViewport(VIEW_WIDTH, VIEW_HEIGHT, camera);
     batch = new SpriteBatch();
+    debug = new SpriteBatch();
 
     viewport.apply();
     camera.zoom = 1f;
@@ -53,13 +58,16 @@ public class SecutorGame extends ApplicationAdapter {
     worldController = new WorldController(world, worldView);
 
     player = new Gladiator(world);
+    player.setPosition(50, 50);
     GladiatorView playerView = new GladiatorView(player);
-    worldController.addController(new GladiatorUserController(player, playerView));
+    worldController.addController(new UserGladiatorController(player, playerView));
 
-    for (int i = 0; i < 5; i++) {
-      Gladiator ai = new Gladiator(world);
+    for (int i = 0; i < 100; i++) {
+      AIGladiator ai = new AIGladiator(world);
+      ai.setEnemy(player);
+      ai.setPosition(new Random().nextInt(9), new Random().nextInt(5));
       GladiatorView aiView = new GladiatorView(ai);
-      worldController.addController(new GladiatorAIController(ai, aiView));
+      worldController.addController(new AIGladiatorController(ai, aiView));
     }
   }
 
@@ -70,9 +78,6 @@ public class SecutorGame extends ApplicationAdapter {
 
   @Override
   public void render () {
-    System.out.println(Gdx.graphics.getFramesPerSecond());
-
-
     float deltaTime = Math.min(Gdx.graphics.getDeltaTime(), 0.25f);
 
     update(deltaTime);
@@ -85,6 +90,10 @@ public class SecutorGame extends ApplicationAdapter {
   }
 
   private void update(float deltaTime) {
+    if (Gdx.input.isKeyJustPressed(Keys.SPACE)) {
+      player.setPosition(0, 0);
+    }
+
     camera.position.set(player.getX(), player.getY(), 0);
     worldController.update(deltaTime);
   }
@@ -98,6 +107,10 @@ public class SecutorGame extends ApplicationAdapter {
     worldView.render(batch, deltaTime);
 
     batch.end();
+
+    debug.begin();
+    SecutorAssets.FONT_24.draw(debug, Gdx.graphics.getFramesPerSecond() + " fps", 0, 24);
+    debug.end();
   }
 
   @Override

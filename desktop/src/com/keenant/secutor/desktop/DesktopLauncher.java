@@ -9,7 +9,7 @@ public class DesktopLauncher {
     Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
     config.setTitle("Secutor");
     config.setWindowedMode(1280, 720);
-    config.useVsync(true);
+    config.useVsync(false);
     new Lwjgl3Application(new SecutorGame(), config);
   }
 }

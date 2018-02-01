@@ -2,6 +2,7 @@ package com.keenant.secutor.engine.controller.world;
 
 import com.keenant.secutor.engine.controller.AbstractController;
 import com.keenant.secutor.engine.controller.Controller;
+import com.keenant.secutor.engine.controller.EntityController;
 import com.keenant.secutor.engine.model.world.World;
 import com.keenant.secutor.engine.view.world.WorldView;
 
@@ -10,7 +11,7 @@ public class WorldController extends AbstractController<World, WorldView> {
     super(model, view);
   }
 
-  public void addController(Controller controller) {
+  public void addController(EntityController controller) {
     model.getControllers().add(controller);
   }
 

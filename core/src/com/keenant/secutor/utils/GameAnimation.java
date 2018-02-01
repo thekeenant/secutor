@@ -2,6 +2,8 @@ package com.keenant.secutor.utils;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.keenant.secutor.animation.GladiatorAnimationState;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,7 +15,7 @@ import java.util.Map;
  * @param <T> the data object which encapsulates the animation logic
  */
 public class GameAnimation<T> extends TextureAnimation {
-  private final AnimationLogic<T> logic;
+  private AnimationLogic<T> logic;
   private final Map<Integer, T> results;
 
   @Override
@@ -30,6 +32,30 @@ public class GameAnimation<T> extends TextureAnimation {
     setPlayMode(playMode);
     this.logic = logic;
     results = new HashMap<>();
+  }
+
+  public GameAnimation<T> cpy() {
+    return new GameAnimation<>(
+        Arrays.copyOf(getKeyFrames(), getKeyFrames().length),
+        getFrameDuration(),
+        getPlayMode(),
+        logic
+    );
+  }
+
+  public GameAnimation<T> flip(boolean flipX, boolean flipY) {
+    for (int i = 0; i < getKeyFrames().length; i++) {
+      TextureRegion copy = new TextureRegion(getKeyFrames()[i]);
+      copy.flip(flipX, flipY);
+      getKeyFrames()[i] = copy;
+    }
+    return this;
+  }
+
+  public GameAnimation<T> logic(AnimationLogic<T> logic) {
+    this.logic = logic;
+    results.clear();
+    return this;
   }
 
   public static <T> GameAnimation<T> split(

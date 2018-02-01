@@ -1,15 +1,20 @@
 package com.keenant.secutor.engine.model.gladiator;
 
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.keenant.secutor.engine.model.CollidableEntity;
 import com.keenant.secutor.engine.model.Entity;
 import com.keenant.secutor.engine.model.world.World;
 import com.keenant.secutor.world.Direction;
 
-public class Gladiator implements Entity {
+public class Gladiator implements Entity, CollidableEntity {
   private final World world;
   private Vector2 position;
+  private Rectangle boundingBox = new Rectangle();
+  private Vector2 lastMovement = new Vector2();
+  private Direction facing = Direction.DOWN;
 
-  private float health = 20;
+  private float speed = 2F;
 
   public Gladiator(World world) {
     this.world = world;
@@ -29,7 +34,40 @@ public class Gladiator implements Entity {
     return world;
   }
 
+  public Vector2 getLastMovement() {
+    return lastMovement;
+  }
+
+  public void setLastMovement(float x, float y) {
+    lastMovement.x = x;
+    lastMovement.y = y;
+    facing = Direction.fromVector(lastMovement.cpy());
+  }
+
+  public Direction getFacing() {
+    return facing;
+  }
+
+  public void setBoundingBox(Rectangle boundingBox) {
+    this.boundingBox = boundingBox;
+  }
+
+  @Override
+  public Rectangle getBoundingBox() {
+    return boundingBox;
+  }
+
+  public Vector2 center() {
+    Vector2 center = new Vector2();
+    boundingBox.getCenter(center);
+    return center;
+  }
+
   public float getHealth() {
-    return health;
+    return 20.0F;
+  }
+
+  public float getMaxHealth() {
+    return 35.0F;
   }
 }
