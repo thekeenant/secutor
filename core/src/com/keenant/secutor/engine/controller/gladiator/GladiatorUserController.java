@@ -2,24 +2,18 @@ package com.keenant.secutor.engine.controller.gladiator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.keenant.secutor.animation.GladiatorAnimationState;
 import com.keenant.secutor.engine.controller.AbstractController;
 import com.keenant.secutor.engine.model.gladiator.Gladiator;
-import com.keenant.secutor.engine.model.gladiator.GladiatorPart;
 import com.keenant.secutor.engine.view.gladiator.GladiatorView;
 
-public class GladiatorController extends AbstractController<Gladiator, GladiatorView> {
-  private final HeadController head;
-
+public class GladiatorUserController extends AbstractController<Gladiator, GladiatorView> {
   private final Vector2 movement = new Vector2();
   private float speed = 4f;
 
-  public GladiatorController(Gladiator model, GladiatorView view) {
+  public GladiatorUserController(Gladiator model, GladiatorView view) {
     super(model, view);
-
-    head = new HeadController(model, model.getHead(), view.getHead());
   }
 
   @Override
@@ -45,10 +39,6 @@ public class GladiatorController extends AbstractController<Gladiator, Gladiator
     // normalize movement to ensure max of 1, then scale based on speed
     movement.nor().scl(8f * (deltaTime / (1 / speed)));
 
-
     model.setPosition(model.getX() + movement.x, model.getY() + movement.y);
-
-    head.setOffset(animationState.getParts().get(GladiatorPart.HEAD));
-    head.update(deltaTime);
   }
 }

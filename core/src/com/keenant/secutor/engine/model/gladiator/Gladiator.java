@@ -2,22 +2,18 @@ package com.keenant.secutor.engine.model.gladiator;
 
 import com.badlogic.gdx.math.Vector2;
 import com.keenant.secutor.engine.model.Entity;
+import com.keenant.secutor.engine.model.world.World;
 import com.keenant.secutor.world.Direction;
 
 public class Gladiator implements Entity {
-  private final Head head;
-
+  private final World world;
   private Vector2 position;
-  private Direction facing = Direction.DOWN;
-  private boolean running;
 
-  public Gladiator() {
-    head = new Head();
+  private float health = 20;
+
+  public Gladiator(World world) {
+    this.world = world;
     position = new Vector2(0, 0);
-  }
-
-  public Head getHead() {
-    return head;
   }
 
   public Vector2 getPosition() {
@@ -29,19 +25,11 @@ public class Gladiator implements Entity {
     position.y = y;
   }
 
-  public Direction getFacing() {
-    return facing;
+  public World getWorld() {
+    return world;
   }
 
-  public void setFacing(Direction facing) {
-    this.facing = facing;
-  }
-
-  public boolean isRunning() {
-    return running;
-  }
-
-  public void setRunning(boolean running) {
-    this.running = running;
+  public float getHealth() {
+    return health;
   }
 }

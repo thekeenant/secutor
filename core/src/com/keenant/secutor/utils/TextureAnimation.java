@@ -1,4 +1,4 @@
-package com.keenant.secutor.tools;
+package com.keenant.secutor.utils;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;

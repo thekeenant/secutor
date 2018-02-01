@@ -1,4 +1,4 @@
-package com.keenant.secutor.tools;
+package com.keenant.secutor.utils;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -21,8 +21,9 @@ public class GameAnimation<T> extends TextureAnimation {
     return getKeyFrames().length + " keyframes";
   }
 
-  public GameAnimation(float frameDuration,
+  public GameAnimation(
       TextureRegion[] keyFrames,
+      float frameDuration,
       PlayMode playMode,
       AnimationLogic<T> logic) {
     super(frameDuration, keyFrames);
@@ -31,8 +32,9 @@ public class GameAnimation<T> extends TextureAnimation {
     results = new HashMap<>();
   }
 
-  public static <T> GameAnimation<T> split(float frameDuration,
+  public static <T> GameAnimation<T> split(
       TextureRegion sheet,
+      float frameDuration,
       int keyFrames,
       PlayMode playMode,
       AnimationLogic<T> logic,
@@ -45,19 +47,15 @@ public class GameAnimation<T> extends TextureAnimation {
     for (TextureRegion texture : textures)
       texture.flip(flipX, flipY);
 
-    return new GameAnimation<>(frameDuration,
-        textures,
-        playMode,
-        logic
-    );
+    return new GameAnimation<>(textures, frameDuration, playMode, logic);
   }
 
-  public static <T> GameAnimation<T> split(float frameDuration,
-      TextureRegion sheet,
+  public static <T> GameAnimation<T> split(TextureRegion sheet,
+      float frameDuration,
       int keyFrames,
       PlayMode playMode,
       AnimationLogic<T> logic) {
-    return split(frameDuration, sheet, keyFrames, playMode, logic, false, false);
+    return split(sheet, frameDuration, keyFrames, playMode, logic, false, false);
   }
 
   public T getState(float stateTime) {

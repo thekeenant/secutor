@@ -7,7 +7,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.keenant.secutor.engine.controller.gladiator.GladiatorController;
+import com.keenant.secutor.engine.controller.gladiator.GladiatorAIController;
+import com.keenant.secutor.engine.controller.gladiator.GladiatorUserController;
 import com.keenant.secutor.engine.controller.world.WorldController;
 import com.keenant.secutor.engine.model.gladiator.Gladiator;
 import com.keenant.secutor.engine.model.world.World;
@@ -15,8 +16,7 @@ import com.keenant.secutor.engine.view.gladiator.GladiatorView;
 import com.keenant.secutor.engine.view.world.WorldView;
 
 public class SecutorGame extends ApplicationAdapter {
-  // 30fps game
-  private static final float TIME_STEP = 1f / 30f;
+  private static SecutorGame game;
 
   private static final float VIEW_WIDTH = 160;
   private static final float VIEW_HEIGHT = 90;
@@ -25,16 +25,23 @@ public class SecutorGame extends ApplicationAdapter {
   private Viewport viewport;
   private SpriteBatch batch;
 
-  private float accumulator;
-
   World world = new World();
   WorldView worldView;
   WorldController worldController;
 
   Gladiator player;
 
+  public static SecutorGame getGame() {
+    return game;
+  }
+
   @Override
   public void create () {
+    game = this;
+
+    // load assets
+    SecutorAssets.load();
+
     camera = new OrthographicCamera();
     viewport = new FitViewport(VIEW_WIDTH, VIEW_HEIGHT, camera);
     batch = new SpriteBatch();
@@ -45,10 +52,15 @@ public class SecutorGame extends ApplicationAdapter {
     worldView = new WorldView(world);
     worldController = new WorldController(world, worldView);
 
-
-    player = new Gladiator();
+    player = new Gladiator(world);
     GladiatorView playerView = new GladiatorView(player);
-    worldController.addController(new GladiatorController(player, playerView));
+    worldController.addController(new GladiatorUserController(player, playerView));
+
+    for (int i = 0; i < 5; i++) {
+      Gladiator ai = new Gladiator(world);
+      GladiatorView aiView = new GladiatorView(ai);
+      worldController.addController(new GladiatorAIController(ai, aiView));
+    }
   }
 
   @Override
@@ -58,20 +70,18 @@ public class SecutorGame extends ApplicationAdapter {
 
   @Override
   public void render () {
-    float frameTime = Math.min(Gdx.graphics.getDeltaTime(), 0.25f);
-    accumulator += frameTime;
+    System.out.println(Gdx.graphics.getFramesPerSecond());
 
-    while (accumulator >= TIME_STEP) {
-      update(TIME_STEP);
 
-      // clear screen with black
-      Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
-      Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    float deltaTime = Math.min(Gdx.graphics.getDeltaTime(), 0.25f);
 
-      draw(TIME_STEP);
+    update(deltaTime);
 
-      accumulator -= TIME_STEP;
-    }
+    // clear screen with black
+    Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
+    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+    draw(deltaTime);
   }
 
   private void update(float deltaTime) {
