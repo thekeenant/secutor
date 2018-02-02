@@ -12,6 +12,11 @@ public class AIGladiator extends Gladiator {
     super(world);
   }
 
+  @Override
+  public float getSpeed() {
+    return 2F;
+  }
+
   public void setDestination(Vector2 destination) {
     this.destination = destination;
   }

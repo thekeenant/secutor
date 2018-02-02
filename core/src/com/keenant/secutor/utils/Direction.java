@@ -1,4 +1,4 @@
-package com.keenant.secutor.world;
+package com.keenant.secutor.utils;
 
 import com.badlogic.gdx.math.Vector2;
 

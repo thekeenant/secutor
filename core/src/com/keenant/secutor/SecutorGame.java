@@ -62,7 +62,7 @@ public class SecutorGame extends ApplicationAdapter {
     GladiatorView playerView = new GladiatorView(player);
     worldController.addController(new UserGladiatorController(player, playerView));
 
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 10; i++) {
       AIGladiator ai = new AIGladiator(world);
       ai.setEnemy(player);
       ai.setPosition(new Random().nextInt(9), new Random().nextInt(5));

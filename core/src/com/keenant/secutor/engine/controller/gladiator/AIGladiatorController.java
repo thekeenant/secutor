@@ -5,6 +5,7 @@ import com.keenant.secutor.engine.controller.EntityController;
 import com.keenant.secutor.engine.model.gladiator.AIGladiator;
 import com.keenant.secutor.engine.model.gladiator.Gladiator;
 import com.keenant.secutor.engine.view.gladiator.GladiatorView;
+import com.keenant.secutor.utils.Direction;
 import java.util.Random;
 
 public class AIGladiatorController extends GladiatorController<AIGladiator> {
@@ -28,10 +29,8 @@ public class AIGladiatorController extends GladiatorController<AIGladiator> {
     }
     else {
       if (System.currentTimeMillis() - lastDestTime > 2000) {
-        if (random.nextDouble() < 0.3) {
-          model.setDestination(new Vector2(model.getX() + random.nextInt(50) - 25,
-              model.getY() + random.nextInt(50) - 25));
-        }
+        model.setDestination(new Vector2(model.getX() + random.nextInt(50) - 25,
+            model.getY() + random.nextInt(50) - 25));
         lastDestTime = System.currentTimeMillis();
       }
     }
@@ -40,22 +39,16 @@ public class AIGladiatorController extends GladiatorController<AIGladiator> {
     Vector2 destination = model.getDestination().orElse(null);
 
     if (destination != null) {
-      if (center.dst2(destination) < 50) {
+      if (center.dst(destination) < 1) {
+        model.setMovement(0, 0);
         model.clearDestination();
       }
       else {
-        Vector2 movement = destination.cpy().sub(position);
-        movement.nor().scl(8f * (deltaTime / (1F / 2F)));
-
-        if (super.testMovement(movement.x, movement.y)) {
-          model.setPosition(model.getX() + movement.x, model.getY() + movement.y);
-          model.setLastMovement(movement.x, movement.y);
-        }
+        Vector2 movement = destination.cpy().sub(position).nor().scl(model.getSpeed());
+        model.setMovement(movement.x, movement.y);
+        model.setFacing(Direction.fromVector(movement));
       }
     }
-
-    super.testMovement(0, 0);
-
 
     super.update(deltaTime);
   }

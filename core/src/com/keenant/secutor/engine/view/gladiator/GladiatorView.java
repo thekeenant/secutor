@@ -10,7 +10,7 @@ import com.keenant.secutor.engine.model.gladiator.AIGladiator;
 import com.keenant.secutor.engine.model.gladiator.Gladiator;
 import com.keenant.secutor.engine.view.AbstractView;
 import com.keenant.secutor.utils.GameAnimation;
-import com.keenant.secutor.world.Direction;
+import com.keenant.secutor.utils.Direction;
 
 public class GladiatorView extends AbstractView<Gladiator> {
   private float stateTime;
@@ -40,6 +40,7 @@ public class GladiatorView extends AbstractView<Gladiator> {
       health
           .setPosition(model.getX() - 1, model.getY() + origin.y + state.getBox().getHeight() + 1);
       health.setSize(6, 1);
+      health.setAlpha(0.5F);
       health.draw(batch);
 
       health = new Sprite(SecutorAssets.WHITE);
@@ -47,6 +48,7 @@ public class GladiatorView extends AbstractView<Gladiator> {
       health
           .setPosition(model.getX() - 1, model.getY() + origin.y + state.getBox().getHeight() + 1);
       health.setSize((model.getHealth() / model.getMaxHealth()) * 6F, 1);
+      health.setAlpha(0.5F);
       health.draw(batch);
     }
 

@@ -33,5 +33,7 @@ public class WorldView extends AbstractView<World> {
     for (EntityController controller : controllers) {
       controller.getView().render(batch, deltaTime);
     }
+
+    batch.draw(SecutorAssets.WHITE, 0, 0, 16, 16);
   }
 }

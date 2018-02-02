@@ -5,20 +5,45 @@ import com.badlogic.gdx.math.Vector2;
 import com.keenant.secutor.engine.model.CollidableEntity;
 import com.keenant.secutor.engine.model.Entity;
 import com.keenant.secutor.engine.model.world.World;
-import com.keenant.secutor.world.Direction;
+import com.keenant.secutor.utils.Direction;
 
 public class Gladiator implements Entity, CollidableEntity {
   private final World world;
   private Vector2 position;
-  private Rectangle boundingBox = new Rectangle();
-  private Vector2 lastMovement = new Vector2();
-  private Direction facing = Direction.DOWN;
 
-  private float speed = 2F;
+  /** walking/running movement velocity */
+  private Vector2 movement = new Vector2();
+
+  /** any additional forces are applied via velocity */
+  private Vector2 velocity = new Vector2();
+  private Rectangle boundingBox = new Rectangle();
+  private Direction facing = Direction.DOWN;
 
   public Gladiator(World world) {
     this.world = world;
     position = new Vector2(0, 0);
+  }
+
+  public float getSpeed() {
+    return 2.5F;
+  }
+
+  public Vector2 getMovement() {
+    return movement;
+  }
+
+  public void setMovement(float x, float y) {
+    movement.x = x;
+    movement.y = y;
+  }
+
+  public Vector2 getVelocity() {
+    return velocity;
+  }
+
+  public void setVelocity(float x, float y) {
+    velocity.x = x;
+    velocity.y = y;
   }
 
   public Vector2 getPosition() {
@@ -34,18 +59,12 @@ public class Gladiator implements Entity, CollidableEntity {
     return world;
   }
 
-  public Vector2 getLastMovement() {
-    return lastMovement;
-  }
-
-  public void setLastMovement(float x, float y) {
-    lastMovement.x = x;
-    lastMovement.y = y;
-    facing = Direction.fromVector(lastMovement.cpy());
-  }
-
   public Direction getFacing() {
     return facing;
+  }
+
+  public void setFacing(Direction facing) {
+    this.facing = facing;
   }
 
   public void setBoundingBox(Rectangle boundingBox) {
