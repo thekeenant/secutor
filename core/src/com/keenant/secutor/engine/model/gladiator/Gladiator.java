@@ -33,8 +33,7 @@ public class Gladiator implements Entity, CollidableEntity {
   }
 
   public void setMovement(float x, float y) {
-    movement.x = x;
-    movement.y = y;
+    movement.set(x, y);
   }
 
   public Vector2 getVelocity() {
@@ -42,8 +41,7 @@ public class Gladiator implements Entity, CollidableEntity {
   }
 
   public void setVelocity(float x, float y) {
-    velocity.x = x;
-    velocity.y = y;
+    velocity.set(x, y);
   }
 
   public Vector2 getPosition() {
@@ -51,8 +49,7 @@ public class Gladiator implements Entity, CollidableEntity {
   }
 
   public void setPosition(float x, float y) {
-    position.x = x;
-    position.y = y;
+    position.set(x, y);
   }
 
   public World getWorld() {
@@ -94,5 +91,9 @@ public class Gladiator implements Entity, CollidableEntity {
 
   public float getMaxHealth() {
     return 35.0F;
+  }
+
+  public void addVelocity(float x, float y) {
+    velocity.add(x, y);
   }
 }

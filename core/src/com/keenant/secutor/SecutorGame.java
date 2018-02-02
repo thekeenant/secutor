@@ -52,7 +52,7 @@ public class SecutorGame extends ApplicationAdapter {
     debug = new SpriteBatch();
 
     viewport.apply();
-    camera.zoom = 1f;
+    camera.zoom = 5f;
 
     worldView = new WorldView(world);
     worldController = new WorldController(world, worldView);
@@ -62,10 +62,10 @@ public class SecutorGame extends ApplicationAdapter {
     GladiatorView playerView = new GladiatorView(player);
     worldController.addController(new UserGladiatorController(player, playerView));
 
-    for (int i = 0; i < 1; i++) {
+    for (int i = 0; i < 500; i++) {
       AIGladiator ai = new AIGladiator(world);
       ai.setEnemy(player);
-      ai.setPosition(new Random().nextInt(9), new Random().nextInt(5));
+      ai.setPosition(new Random().nextInt(500), new Random().nextInt(500));
       GladiatorView aiView = new GladiatorView(ai);
       worldController.addController(new AIGladiatorController(ai, aiView));
     }
@@ -78,14 +78,12 @@ public class SecutorGame extends ApplicationAdapter {
 
   @Override
   public void render () {
-    float deltaTime = Math.min(Gdx.graphics.getDeltaTime(), 0.25f);
+    boolean paused = Gdx.input.isKeyPressed(Keys.TAB);
 
-    update(deltaTime);
+    float deltaTime = paused ? 0 : Gdx.graphics.getDeltaTime();
 
-    // clear screen with black
-    Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
-    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+    if (!paused)
+      update(deltaTime);
     draw(deltaTime);
   }
 
@@ -96,16 +94,17 @@ public class SecutorGame extends ApplicationAdapter {
 
     camera.position.set(player.getX(), player.getY(), 0);
     worldController.update(deltaTime);
+    camera.update();
   }
 
   private void draw(float deltaTime) {
-    camera.update();
+    Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
+    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
     batch.setProjectionMatrix(camera.combined);
 
     batch.begin();
-
     worldView.render(batch, deltaTime);
-
     batch.end();
 
     debug.begin();
