@@ -1,5 +1,6 @@
 package com.keenant.secutor.engine.controller.gladiator;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.keenant.secutor.Constants;
@@ -48,6 +49,8 @@ public class GladiatorController<M extends Gladiator> extends EntityController<M
         if (other.isColliding(model.getBoundingBox(), 1F)) {
           Vector2 push = other.getPosition().cpy().sub(pos).nor().scl(2F);
           other.setVelocity(push.x, push.y);
+
+          other.setHealth(Math.max(0, other.getHealth() - 1F * deltaTime));
         }
       }
     }

@@ -82,8 +82,14 @@ public class Gladiator implements Entity, CollidableEntity {
     return center;
   }
 
+  private float health = 35.0F;
+
+  public void setHealth(float health) {
+    this.health = health;
+  }
+
   public float getHealth() {
-    return 20.0F;
+    return health;
   }
 
   public float getMaxHealth() {
