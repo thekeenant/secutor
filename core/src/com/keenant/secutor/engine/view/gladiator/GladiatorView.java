@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.keenant.secutor.SecutorAssets;
+import com.keenant.secutor.Assets;
 import com.keenant.secutor.animation.GladiatorAnimationState;
 import com.keenant.secutor.engine.model.gladiator.AIGladiator;
 import com.keenant.secutor.engine.model.gladiator.Gladiator;
@@ -30,12 +30,12 @@ public class GladiatorView extends AbstractView<Gladiator> {
     float drawX = model.getX() - origin.x;
     float drawY = model.getY() - origin.y;
 
-    batch.draw(SecutorAssets.GLADIATOR_SHADOW.getKeyFrame(stateTime), drawX, model.getY() - 1);
+    batch.draw(Assets.GLADIATOR_SHADOW.getKeyFrame(stateTime), drawX, model.getY() - 1);
     batch.draw(animation.getKeyFrame(stateTime), drawX, drawY);
 
 
     if (!(model instanceof AIGladiator)) {
-      Sprite health = new Sprite(SecutorAssets.WHITE);
+      Sprite health = new Sprite(Assets.WHITE);
       health.setColor(Color.RED);
       health
           .setPosition(model.getX() - 1, model.getY() + origin.y + state.getBox().getHeight() + 1);
@@ -43,7 +43,7 @@ public class GladiatorView extends AbstractView<Gladiator> {
       health.setAlpha(0.5F);
       health.draw(batch);
 
-      health = new Sprite(SecutorAssets.WHITE);
+      health = new Sprite(Assets.WHITE);
       health.setColor(Color.GREEN);
       health
           .setPosition(model.getX() - 1, model.getY() + origin.y + state.getBox().getHeight() + 1);
@@ -59,15 +59,15 @@ public class GladiatorView extends AbstractView<Gladiator> {
     Direction facing = model.getFacing();
     switch (facing) {
       case UP:
-        return SecutorAssets.GLADIATOR_UP;
+        return Assets.GLADIATOR_UP;
       case DOWN:
-        return SecutorAssets.GLADIATOR_DOWN;
+        return Assets.GLADIATOR_DOWN;
       case LEFT:
-        return SecutorAssets.GLADIATOR_LEFT;
+        return Assets.GLADIATOR_LEFT;
       case RIGHT:
-        return SecutorAssets.GLADIATOR_RIGHT;
+        return Assets.GLADIATOR_RIGHT;
       default:
-        return SecutorAssets.GLADIATOR_DOWN;
+        return Assets.GLADIATOR_DOWN;
     }
   }
 

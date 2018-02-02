@@ -1,7 +1,6 @@
 package com.keenant.secutor.engine.controller.gladiator;
 
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import com.keenant.secutor.Constants;
 import com.keenant.secutor.animation.GladiatorAnimationState;
@@ -15,16 +14,35 @@ public class GladiatorController<M extends Gladiator> extends EntityController<M
     super(model, view);
   }
 
+  public GladiatorController(M model) {
+    this(model, new GladiatorView(model));
+  }
+
   @Override
   public void update(float deltaTime) {
     Vector2 velocity = model.getVelocity();
     Vector2 movement = model.getMovement();
 
-    Vector2 change = velocity.cpy().add(movement).scl(Constants.METER * deltaTime);
+    Vector2 change = velocity.cpy();
+    // only allow movement if they are stronger than the force being applied to them
+    if (movement.len2() > velocity.len2()) {
+      change.add(movement);
+    }
+    change.scl(Constants.METER * deltaTime);
+
     Vector2 nextPos = new Vector2(model.getX() + change.x, model.getY() + change.y);
     Utils.clamp(nextPos, new Rectangle(0, 0, 320, 180));
 
-    velocity.sub(velocity.cpy().nor().scl(deltaTime * 2));
+    // dampen velocity
+    Vector2 deceleration = velocity.cpy().nor().scl(deltaTime * Constants.DECELERATION);
+    if (deceleration.len2() >= velocity.len2()) {
+      // decelerate to zero if deceleration is greater than curr velocity
+      velocity.setZero();
+    }
+    else {
+      // decelerate by calculated amount
+      velocity.sub(deceleration);
+    }
 
     GladiatorAnimationState animationState = view.currentAnimationState();
     Rectangle feet = animationState.getFeetBox();
@@ -56,7 +74,7 @@ public class GladiatorController<M extends Gladiator> extends EntityController<M
     boolean allowedX = true;
     boolean allowedY = true;
 
-    for (EntityController<?, ?> controller : getModel().getWorld().getControllers()) {
+    for (EntityController<?, ?> controller : getModel().getWorld().getEntities()) {
       if (controller.equals(this))
         continue;
 
@@ -76,7 +94,11 @@ public class GladiatorController<M extends Gladiator> extends EntityController<M
         }
 
         if (other.isColliding(boundingBox, 1F)) {
-          Vector2 push = other.getPosition().cpy().sub(nextPos).nor().scl(2F);
+          float randomness = 0.1F;
+          float randomX = (Utils.random().nextFloat() - 0.5f) * randomness;
+          float randomY = (Utils.random().nextFloat() - 0.5f) * randomness;
+
+          Vector2 push = other.getPosition().cpy().sub(nextPos).nor().scl(1.5F).add(randomX, randomY);
           other.setVelocity(push.x, push.y);
         }
       }
@@ -85,16 +107,15 @@ public class GladiatorController<M extends Gladiator> extends EntityController<M
     if (this instanceof UserGladiatorController)
       allowedXY = true;
 
-    if (allowedXY) {
-
-    }
-    else if (allowedX) {
-      nextPos.y = model.getY();
-      boundingBox = boundingBoxX;
-    }
-    else if (allowedY) {
-      nextPos.x = model.getX();
-      boundingBox = boundingBoxY;
+    if (!allowedXY) {
+      if (allowedX) {
+        nextPos.y = model.getY();
+        boundingBox = boundingBoxX;
+      }
+      else if (allowedY) {
+        nextPos.x = model.getX();
+        boundingBox = boundingBoxY;
+      }
     }
 
     if (allowedXY || allowedX || allowedY) {

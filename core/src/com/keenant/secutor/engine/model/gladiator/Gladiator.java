@@ -42,6 +42,9 @@ public class Gladiator implements Entity, CollidableEntity {
 
   public void setVelocity(float x, float y) {
     velocity.set(x, y);
+    if (velocity.isZero(0.1F)) {
+      velocity.setZero();
+    }
   }
 
   public Vector2 getPosition() {

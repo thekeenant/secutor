@@ -2,6 +2,7 @@ package com.keenant.secutor;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -16,7 +17,7 @@ import com.keenant.secutor.utils.GameAnimationParams;
 /**
  * Asset manager wrapper.
  */
-public class SecutorAssets {
+public class Assets {
   public static GameAnimation<GladiatorAnimationState> GLADIATOR_DOWN;
   public static GameAnimation<GladiatorAnimationState> GLADIATOR_UP;
   public static GameAnimation<GladiatorAnimationState> GLADIATOR_RIGHT;
@@ -74,7 +75,7 @@ public class SecutorAssets {
 
 
     // TODO: through manager
-    FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("manaspace.regular.ttf"));
+    FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("dpcomic.ttf"));
     FreeTypeFontParameter param = new FreeTypeFontParameter();
     param.size = 24;
     FONT_24 = gen.generateFont(param);

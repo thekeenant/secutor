@@ -14,6 +14,10 @@ public class UserGladiatorController extends GladiatorController<Gladiator> {
     super(model, view);
   }
 
+  public UserGladiatorController(Gladiator model) {
+    super(model);
+  }
+
   @Override
   public void update(float deltaTime) {
     movement.x = 0;
