@@ -2,6 +2,7 @@ package com.keenant.secutor.engine.controller.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.ai.GdxAI;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.keenant.secutor.engine.controller.AbstractController;
 import com.keenant.secutor.engine.controller.gladiator.UserGladiatorController;
@@ -21,7 +22,7 @@ public class GameController extends AbstractController<Game, GameView> {
     player.setVelocity(5, 5);
 
     world.addEntity(new UserGladiatorController(player));
-    world.makeInteresting(10);
+    world.makeInteresting(1, player);
 
     model.setPlayer(player);
     model.setWorldController(new WorldController(world));
@@ -41,6 +42,8 @@ public class GameController extends AbstractController<Game, GameView> {
 
   @Override
   public void update(float deltaTime) {
+    GdxAI.getTimepiece().update(deltaTime);
+
     if (Gdx.input.isKeyJustPressed(Keys.F11)) {
       model.setFullscreen(!model.isFullscreen());
 

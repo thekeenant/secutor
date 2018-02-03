@@ -20,12 +20,18 @@ public class World implements Model {
     entities.add(entity);
   }
 
-  public void makeInteresting(int scale) {
-    for (int i = 0 ; i < scale; i++) {
-      AIGladiator ai = new AIGladiator(this);
-      addEntity(new AIGladiatorController(ai));
+  public void makeInteresting(int scale, Gladiator player) {
+    AIGladiator a1 = new AIGladiator(this);
+    AIGladiator a2 = new AIGladiator(this);
 
-      ai.setPosition(Utils.random().nextFloat() * scale, Utils.random().nextFloat() * scale);
-    }
+    a1.setEnemy(a2);
+    a2.setEnemy(a1);
+
+    a1.setPosition(Utils.random().nextFloat() * scale + 80, Utils.random().nextFloat() * scale);
+    a2.setPosition(Utils.random().nextFloat() * scale, Utils.random().nextFloat() * scale);
+
+
+    addEntity(new AIGladiatorController(a1));
+    addEntity(new AIGladiatorController(a2));
   }
 }

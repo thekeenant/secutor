@@ -26,12 +26,14 @@ public class GladiatorAnimationLogic {
     Rectangle box = new Rectangle(4, 0, 8, 16);
     Rectangle feetBox = new Rectangle(0, 0, 4, 1);
     Vector2 rightHand = new Vector2(0, 6);
+    boolean stabbing = false;
 
     if (index == 1) {
       rightHand.add(0, 1);
     }
     else if (index == 2) {
       rightHand.add(0, 2);
+      stabbing = true;
     }
     else if (index == 3) {
       rightHand.add(0, 1);
@@ -40,7 +42,7 @@ public class GladiatorAnimationLogic {
       rightHand.sub(0, 1);
     }
 
-    return new GladiatorAnimationState(origin, box, feetBox, rightHand, false);
+    return new GladiatorAnimationState(origin, box, feetBox, rightHand, stabbing);
   };
 
   public static AnimationLogic<GladiatorAnimationState> UP = (index) -> {
@@ -63,6 +65,7 @@ public class GladiatorAnimationLogic {
     Rectangle box = new Rectangle(4, 0, 8, 16);
     Rectangle feetBox = new Rectangle(0, 0, 4, 1);
     Vector2 rightHand = new Vector2(7, 6);
+    boolean stabbing = false;
 
     if (index == 1) {
       rightHand.add(0, 1);
@@ -72,12 +75,13 @@ public class GladiatorAnimationLogic {
     }
     if (index == 3) {
       rightHand.add(0, 6);
+      stabbing = true;
     }
     if (index == 4) {
       rightHand.add(0, 2);
     }
 
-    return new GladiatorAnimationState(origin, box, feetBox, rightHand,false);
+    return new GladiatorAnimationState(origin, box, feetBox, rightHand, stabbing);
   };
 
   public static AnimationLogic<GladiatorAnimationState> RIGHT = (index) -> {
@@ -100,6 +104,7 @@ public class GladiatorAnimationLogic {
     Rectangle box = new Rectangle(6, 0, 4, 16);
     Rectangle feetBox = new Rectangle(0, 0, 4, 1);
     Vector2 rightHand = new Vector2(1, 6);
+    boolean stabbing = false;
 
     if (index == 1) {
       rightHand.add(1, 1);
@@ -109,12 +114,13 @@ public class GladiatorAnimationLogic {
     }
     else if (index == 3) {
       rightHand.add(4, 3);
+      stabbing = true;
     }
     else if (index == 4) {
       rightHand.add(2, 2);
     }
 
-    return new GladiatorAnimationState(origin, box, feetBox, rightHand,false);
+    return new GladiatorAnimationState(origin, box, feetBox, rightHand, stabbing);
   };
 
   public static AnimationLogic<GladiatorAnimationState> LEFT = (index) -> {

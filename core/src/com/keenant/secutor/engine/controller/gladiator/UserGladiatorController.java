@@ -12,10 +12,6 @@ import com.keenant.secutor.utils.GameAnimation;
 public class UserGladiatorController extends GladiatorController<Gladiator> {
   private static final Vector2 movement = new Vector2();
 
-  public UserGladiatorController(Gladiator model, GladiatorView view) {
-    super(model, view);
-  }
-
   public UserGladiatorController(Gladiator model) {
     super(model);
   }
@@ -39,7 +35,8 @@ public class UserGladiatorController extends GladiatorController<Gladiator> {
     }
 
     if (Gdx.input.isKeyJustPressed(Keys.SPACE)) {
-      model.setAttacking(true);
+      if (!model.isAttacking())
+        model.setAttacking(true);
     }
 
     float mod = Gdx.input.isKeyPressed(Keys.SHIFT_LEFT) ? 2F : 1F;

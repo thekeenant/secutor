@@ -22,6 +22,8 @@ public class Gladiator implements Entity, CollidableEntity {
   private boolean attacking;
   private float attackingTime;
 
+  private float health = getMaxHealth();
+
   public Gladiator(World world) {
     this.world = world;
     position = new Vector2(0, 0);
@@ -85,8 +87,6 @@ public class Gladiator implements Entity, CollidableEntity {
     return center;
   }
 
-  private float health = 35.0F;
-
   public void setHealth(float health) {
     this.health = health;
   }
@@ -96,7 +96,7 @@ public class Gladiator implements Entity, CollidableEntity {
   }
 
   public float getMaxHealth() {
-    return 35.0F;
+    return 100F;
   }
 
   public void addVelocity(float x, float y) {
@@ -108,7 +108,7 @@ public class Gladiator implements Entity, CollidableEntity {
   }
 
   public void setAttacking(boolean attacking) {
-    if (this.attacking != attacking)
+    if (attacking)
       attackingTime = 0;
 
     this.attacking = attacking;

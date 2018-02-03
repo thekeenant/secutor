@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.keenant.secutor.Constants;
 import com.keenant.secutor.animation.GladiatorAnimationState;
 import com.keenant.secutor.engine.controller.EntityController;
+import com.keenant.secutor.engine.model.gladiator.AIGladiator;
 import com.keenant.secutor.engine.model.gladiator.Gladiator;
 import com.keenant.secutor.engine.view.gladiator.GladiatorView;
 import com.keenant.secutor.utils.Direction;
@@ -29,6 +30,18 @@ public class GladiatorController<M extends Gladiator> extends EntityController<M
         model.setAttacking(false);
       }
     }
+
+    if (model.isAttacking()) {
+      GladiatorAnimationState animationState = view.currentAnimationState();
+
+      if (model instanceof AIGladiator) {
+        AIGladiator ai = (AIGladiator) model;
+        ai.getEnemy().ifPresent(enemy -> {
+          enemy.setHealth(Math.max(0, enemy.getHealth() - 0.2F));
+        });
+      }
+    }
+
 
     Vector2 velocity = model.getVelocity();
     Vector2 movement = model.getMovement();
