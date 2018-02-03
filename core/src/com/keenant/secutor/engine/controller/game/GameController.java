@@ -21,7 +21,7 @@ public class GameController extends AbstractController<Game, GameView> {
     player.setVelocity(5, 5);
 
     world.addEntity(new UserGladiatorController(player));
-    world.makeInteresting(10, player);
+    world.makeInteresting(10);
 
     model.setPlayer(player);
     model.setWorldController(new WorldController(world));
@@ -58,9 +58,6 @@ public class GameController extends AbstractController<Game, GameView> {
       OrthographicCamera camera = model.getCamera();
 
       if (player != null) {
-        if (Gdx.input.isKeyJustPressed(Keys.SPACE)) {
-          player.setPosition(0, 0);
-        }
         camera.position.x += (player.getX() - camera.position.x) * 2 * deltaTime;
         camera.position.y += (player.getY() - camera.position.y) * 2 * deltaTime;
         camera.update();

@@ -21,6 +21,28 @@ public class GladiatorAnimationLogic {
     return new GladiatorAnimationState(origin, box, feetBox, rightHand, false);
   };
 
+  public static AnimationLogic<GladiatorAnimationState> DOWN_ATTACK = (index) -> {
+    Vector2 origin = new Vector2(6, 0);
+    Rectangle box = new Rectangle(4, 0, 8, 16);
+    Rectangle feetBox = new Rectangle(0, 0, 4, 1);
+    Vector2 rightHand = new Vector2(0, 6);
+
+    if (index == 1) {
+      rightHand.add(0, 1);
+    }
+    else if (index == 2) {
+      rightHand.add(0, 2);
+    }
+    else if (index == 3) {
+      rightHand.add(0, 1);
+    }
+    else if (index == 4) {
+      rightHand.sub(0, 1);
+    }
+
+    return new GladiatorAnimationState(origin, box, feetBox, rightHand, false);
+  };
+
   public static AnimationLogic<GladiatorAnimationState> UP = (index) -> {
     // same box as down
     Vector2 origin = new Vector2(6, 0);
@@ -35,6 +57,29 @@ public class GladiatorAnimationLogic {
     return new GladiatorAnimationState(origin, box, feetBox, rightHand,false);
   };
 
+  public static AnimationLogic<GladiatorAnimationState> UP_ATTACK = (index) -> {
+    // same box as down
+    Vector2 origin = new Vector2(6, 0);
+    Rectangle box = new Rectangle(4, 0, 8, 16);
+    Rectangle feetBox = new Rectangle(0, 0, 4, 1);
+    Vector2 rightHand = new Vector2(7, 6);
+
+    if (index == 1) {
+      rightHand.add(0, 1);
+    }
+    if (index == 2) {
+      rightHand.add(0, 4);
+    }
+    if (index == 3) {
+      rightHand.add(0, 6);
+    }
+    if (index == 4) {
+      rightHand.add(0, 2);
+    }
+
+    return new GladiatorAnimationState(origin, box, feetBox, rightHand,false);
+  };
+
   public static AnimationLogic<GladiatorAnimationState> RIGHT = (index) -> {
     // same box as down
     Vector2 origin = new Vector2(6, 0);
@@ -44,6 +89,29 @@ public class GladiatorAnimationLogic {
 
     if (index == 1) {
       rightHand.add(0, 1);
+    }
+
+    return new GladiatorAnimationState(origin, box, feetBox, rightHand,false);
+  };
+
+  public static AnimationLogic<GladiatorAnimationState> RIGHT_ATTACK = (index) -> {
+    // same box as down
+    Vector2 origin = new Vector2(6, 0);
+    Rectangle box = new Rectangle(6, 0, 4, 16);
+    Rectangle feetBox = new Rectangle(0, 0, 4, 1);
+    Vector2 rightHand = new Vector2(1, 6);
+
+    if (index == 1) {
+      rightHand.add(1, 1);
+    }
+    else if (index == 2) {
+      rightHand.add(2, 2);
+    }
+    else if (index == 3) {
+      rightHand.add(4, 3);
+    }
+    else if (index == 4) {
+      rightHand.add(2, 2);
     }
 
     return new GladiatorAnimationState(origin, box, feetBox, rightHand,false);

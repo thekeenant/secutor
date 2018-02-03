@@ -6,7 +6,6 @@ import java.util.Optional;
 
 public class AIGladiator extends Gladiator {
   private Vector2 destination;
-  private Gladiator enemy;
 
   public AIGladiator(World world) {
     super(world);
@@ -27,13 +26,5 @@ public class AIGladiator extends Gladiator {
 
   public void clearDestination() {
     this.destination = null;
-  }
-
-  public Optional<Gladiator> getEnemy() {
-    return Optional.ofNullable(enemy);
-  }
-
-  public void setEnemy(Gladiator enemy) {
-    this.enemy = enemy;
   }
 }

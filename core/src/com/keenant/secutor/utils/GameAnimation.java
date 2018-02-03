@@ -23,8 +23,7 @@ public class GameAnimation<T> extends TextureAnimation {
     return getKeyFrames().length + " keyframes";
   }
 
-  public GameAnimation(
-      TextureRegion[] keyFrames,
+  public GameAnimation(TextureRegion[] keyFrames,
       float frameDuration,
       PlayMode playMode,
       AnimationLogic<T> logic) {

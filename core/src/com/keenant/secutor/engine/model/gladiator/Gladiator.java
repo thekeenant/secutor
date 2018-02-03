@@ -19,6 +19,9 @@ public class Gladiator implements Entity, CollidableEntity {
   private Rectangle boundingBox = new Rectangle();
   private Direction facing = Direction.DOWN;
 
+  private boolean attacking;
+  private float attackingTime;
+
   public Gladiator(World world) {
     this.world = world;
     position = new Vector2(0, 0);
@@ -98,5 +101,24 @@ public class Gladiator implements Entity, CollidableEntity {
 
   public void addVelocity(float x, float y) {
     velocity.add(x, y);
+  }
+
+  public boolean isAttacking() {
+    return attacking;
+  }
+
+  public void setAttacking(boolean attacking) {
+    if (this.attacking != attacking)
+      attackingTime = 0;
+
+    this.attacking = attacking;
+  }
+
+  public float getAttackingTime() {
+    return attackingTime;
+  }
+
+  public void setAttackingTime(float attackingTime) {
+    this.attackingTime = attackingTime;
   }
 }

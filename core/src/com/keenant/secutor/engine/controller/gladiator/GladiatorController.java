@@ -7,6 +7,8 @@ import com.keenant.secutor.animation.GladiatorAnimationState;
 import com.keenant.secutor.engine.controller.EntityController;
 import com.keenant.secutor.engine.model.gladiator.Gladiator;
 import com.keenant.secutor.engine.view.gladiator.GladiatorView;
+import com.keenant.secutor.utils.Direction;
+import com.keenant.secutor.utils.GameAnimation;
 import com.keenant.secutor.utils.Utils;
 
 public class GladiatorController<M extends Gladiator> extends EntityController<M, GladiatorView> {
@@ -20,8 +22,24 @@ public class GladiatorController<M extends Gladiator> extends EntityController<M
 
   @Override
   public void update(float deltaTime) {
+    GameAnimation<GladiatorAnimationState> animation = view.currentAnimation();
+
+    if (model.isAttacking()) {
+      if (animation.isAnimationFinished(model.getAttackingTime())) {
+        model.setAttacking(false);
+      }
+    }
+
     Vector2 velocity = model.getVelocity();
     Vector2 movement = model.getMovement();
+
+    if (model.isAttacking()) {
+      movement.scl(0.5F);
+    }
+    else {
+      if (!movement.isZero())
+        model.setFacing(Direction.fromVector(movement.cpy()));
+    }
 
     Vector2 change = velocity.cpy();
     // only allow movement if they are stronger than the force being applied to them
@@ -30,8 +48,8 @@ public class GladiatorController<M extends Gladiator> extends EntityController<M
     }
     change.scl(Constants.METER * deltaTime);
 
-    Vector2 nextPos = new Vector2(model.getX() + change.x, model.getY() + change.y);
-    Utils.clamp(nextPos, new Rectangle(0, 0, 320, 180));
+    // next position is current pos plus change
+    Vector2 nextPos = model.getPosition().cpy().add(change);
 
     // dampen velocity
     Vector2 deceleration = velocity.cpy().nor().scl(deltaTime * Constants.DECELERATION);
