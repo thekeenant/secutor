@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.keenant.secutor.engine.controller.Controller;
+import com.keenant.secutor.engine.controller.game.GameController;
 import com.keenant.secutor.engine.controller.world.WorldController;
 import com.keenant.secutor.engine.model.Model;
 import com.keenant.secutor.engine.model.gladiator.Gladiator;
@@ -20,7 +22,7 @@ public class Game implements Model {
   private SpriteBatch debug;
 
   private boolean paused;
-  private WorldController world;
+  private World world;
   private Gladiator player;
 
   private boolean fullscreen;
@@ -54,16 +56,12 @@ public class Game implements Model {
     return viewport;
   }
 
-  public void setWorldController(WorldController world) {
+  public void setWorld(World world) {
     this.world = world;
   }
 
-  public Optional<WorldController> getWorldController() {
-    return Optional.ofNullable(world);
-  }
-
   public Optional<World> getWorld() {
-    return getWorldController().map(WorldController::getModel);
+    return Optional.ofNullable(world);
   }
 
   public boolean isPaused() {
@@ -88,5 +86,10 @@ public class Game implements Model {
 
   public void setFullscreen(boolean fullscreen) {
     this.fullscreen = fullscreen;
+  }
+
+  @Override
+  public GameController createController() {
+    return new GameController(this);
   }
 }

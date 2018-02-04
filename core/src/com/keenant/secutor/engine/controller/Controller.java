@@ -10,10 +10,14 @@ import com.keenant.secutor.engine.view.View;
  * @param <M> the model
  * @param <V> the view
  */
-public interface Controller<M extends Model, V extends View> {
+public interface Controller<M extends Model, V extends View<M>> {
   M getModel();
 
   V getView();
+
+  void setModel(M model);
+
+  void setView(V view);
 
   void update(float deltaTime);
 }
