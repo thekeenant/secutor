@@ -1,6 +1,9 @@
 package com.keenant.secutor.engine.model.gladiator;
 
 import com.badlogic.gdx.math.Vector2;
+import com.keenant.secutor.engine.controller.Controller;
+import com.keenant.secutor.engine.controller.gladiator.AIGladiatorController;
+import com.keenant.secutor.engine.controller.gladiator.GladiatorController;
 import com.keenant.secutor.engine.model.world.World;
 import java.util.Optional;
 
@@ -8,8 +11,8 @@ public class AIGladiator extends Gladiator {
   private Vector2 destination;
   private Gladiator enemy;
 
-  public AIGladiator(World world) {
-    super(world);
+  public AIGladiator(World world, String name) {
+    super(world, name);
   }
 
   @Override
@@ -35,5 +38,10 @@ public class AIGladiator extends Gladiator {
 
   public void setEnemy(Gladiator enemy) {
     this.enemy = enemy;
+  }
+
+  @Override
+  public GladiatorController<AIGladiator> createController() {
+    return new AIGladiatorController(this);
   }
 }

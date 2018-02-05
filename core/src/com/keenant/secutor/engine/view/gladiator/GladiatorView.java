@@ -1,6 +1,7 @@
 package com.keenant.secutor.engine.view.gladiator;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -12,15 +13,17 @@ import com.keenant.secutor.engine.view.AbstractView;
 import com.keenant.secutor.utils.Direction;
 import com.keenant.secutor.utils.GameAnimation;
 
-public class GladiatorView extends AbstractView<Gladiator> {
+public class GladiatorView<M extends Gladiator> extends AbstractView<M> {
   private float stateTime;
 
-  public GladiatorView(Gladiator gladiator) {
+  public GladiatorView(M gladiator) {
     super(gladiator);
     stateTime = (float) Math.random();
   }
 
   private void renderHealth(SpriteBatch batch) {
+    Gladiator model = getModel();
+
     Sprite green = new Sprite(Assets.WHITE);
     green.setColor(Color.GREEN);
     green.setAlpha(0.5F);
@@ -45,8 +48,21 @@ public class GladiatorView extends AbstractView<Gladiator> {
     red.draw(batch);
   }
 
+  private void renderName(SpriteBatch batch) {
+    Gladiator model = getModel();
+
+    BitmapFont font = Assets.FONT_24;
+    font.setUseIntegerPositions(false);
+    font.getData().setScale(0.2F);
+
+    // TODO: draw font on different layer (w/ RenderContext object for help)
+    font.draw(batch, model.getName(), model.getX(), model.getY());
+  }
+
   @Override
   public void render(SpriteBatch batch, float deltaTime) {
+    Gladiator model = getModel();
+
     GameAnimation<GladiatorAnimationState> animation = currentAnimation();
     GladiatorAnimationState state = animation.getState(stateTime);
 
@@ -59,7 +75,9 @@ public class GladiatorView extends AbstractView<Gladiator> {
 
     batch.draw(frame, drawX, model.getY() - 1);
     batch.draw(animation.getKeyFrame(stateTime), drawX, drawY);
+
     renderHealth(batch);
+    renderName(batch);
 
     stateTime += deltaTime;
     if (model.isAttacking()) {
@@ -68,6 +86,8 @@ public class GladiatorView extends AbstractView<Gladiator> {
   }
 
   public GameAnimation<GladiatorAnimationState> currentAnimation() {
+    Gladiator model = getModel();
+
     Direction facing = model.getFacing();
     switch (facing) {
       case UP:
@@ -96,6 +116,8 @@ public class GladiatorView extends AbstractView<Gladiator> {
   }
 
   public GladiatorAnimationState currentAnimationState() {
+    Gladiator model = getModel();
+
     float stateTime = model.isAttacking() ? model.getAttackingTime() : this.stateTime;
     return currentAnimation().getState(stateTime);
   }

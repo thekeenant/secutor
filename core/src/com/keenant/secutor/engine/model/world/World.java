@@ -1,37 +1,40 @@
 package com.keenant.secutor.engine.model.world;
 
-import com.keenant.secutor.engine.controller.EntityController;
-import com.keenant.secutor.engine.controller.gladiator.AIGladiatorController;
+import com.keenant.secutor.engine.controller.world.WorldController;
+import com.keenant.secutor.engine.model.Entity;
 import com.keenant.secutor.engine.model.Model;
-import com.keenant.secutor.engine.model.gladiator.AIGladiator;
-import com.keenant.secutor.engine.model.gladiator.Gladiator;
-import com.keenant.secutor.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 
 public class World implements Model {
-  private final List<EntityController<?, ?>> entities = new ArrayList<>();
+  private final List<Entity> entities = new ArrayList<>();
+  private final List<Entity> entitiesToRemove = new ArrayList<>();
 
-  public List<EntityController<?, ?>> getEntities() {
+  public List<Entity> getEntities() {
     return entities;
   }
 
-  public void addEntity(EntityController<?, ?> entity) {
+  public Optional<Entity> getEntity(UUID uuid) {
+    return entities.stream().filter(entity -> Objects.equals(entity.getUuid(), uuid)).findFirst();
+  }
+
+  public void addEntity(Entity entity) {
     entities.add(entity);
   }
 
-  public void makeInteresting(int scale, Gladiator player) {
-    AIGladiator a1 = new AIGladiator(this);
-    AIGladiator a2 = new AIGladiator(this);
+  @Override
+  public WorldController createController() {
+    return new WorldController(this);
+  }
 
-    a1.setEnemy(a2);
-    a2.setEnemy(a1);
+  public void removeEntity(Entity remove) {
+    this.entitiesToRemove.add(remove);
+  }
 
-    a1.setPosition(Utils.random().nextFloat() * scale + 80, Utils.random().nextFloat() * scale);
-    a2.setPosition(Utils.random().nextFloat() * scale, Utils.random().nextFloat() * scale);
-
-
-    addEntity(new AIGladiatorController(a1));
-    addEntity(new AIGladiatorController(a2));
+  public List<Entity> getEntitiesToRemove() {
+    return entitiesToRemove;
   }
 }

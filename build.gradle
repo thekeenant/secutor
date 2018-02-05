@@ -1,6 +1,4 @@
 buildscript {
-    
-
     repositories {
         mavenLocal()
         mavenCentral()
@@ -8,7 +6,6 @@ buildscript {
         jcenter()
     }
     dependencies {
-        
 
     }
 }
@@ -59,6 +56,8 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-ai:1.8.0"
+        compile "com.esotericsoftware:kryonet:2.22.0-RC1"
+        compile "com.beust:jcommander:1.72"
     }
 }
 

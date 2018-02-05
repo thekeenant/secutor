@@ -1,9 +1,19 @@
 package com.keenant.secutor.engine.view;
 
-public abstract class AbstractView<M> implements View {
-  protected final M model;
+import com.keenant.secutor.engine.model.Model;
+
+public abstract class AbstractView<M extends Model> implements View<M> {
+  private M model;
 
   public AbstractView(M model) {
+    this.model = model;
+  }
+
+  public M getModel() {
+    return model;
+  }
+
+  public void setModel(M model) {
     this.model = model;
   }
 }

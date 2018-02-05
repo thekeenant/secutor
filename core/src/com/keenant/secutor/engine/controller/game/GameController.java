@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.ai.GdxAI;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.keenant.secutor.engine.controller.AbstractController;
-import com.keenant.secutor.engine.controller.gladiator.UserGladiatorController;
 import com.keenant.secutor.engine.controller.world.WorldController;
 import com.keenant.secutor.engine.model.game.Game;
 import com.keenant.secutor.engine.model.gladiator.Gladiator;
@@ -13,22 +12,25 @@ import com.keenant.secutor.engine.model.world.World;
 import com.keenant.secutor.engine.view.game.GameView;
 
 public class GameController extends AbstractController<Game, GameView> {
-  public GameController(Game model, GameView view) {
-    super(model, view);
+  private WorldController worldController;
 
-    World world = new World();
-    Gladiator player = new Gladiator(world);
-    player.setPosition(0, 0);
-    player.setVelocity(5, 5);
-
-    world.addEntity(new UserGladiatorController(player));
-    world.makeInteresting(1, player);
-
-    model.setPlayer(player);
-    model.setWorldController(new WorldController(world));
+  public GameController(Game model) {
+    super(model, new GameView(model));
   }
 
   public void render() {
+    Game model = getModel();
+    GameView view = getView();
+
+    World world = model.getWorld().orElse(null);
+
+    if (world != null) {
+      if (worldController == null)
+        worldController = world.createController();
+      worldController.setModel(world);
+      view.setWorldView(worldController.getView());
+    }
+
     boolean pausedPressed = Gdx.input.isKeyJustPressed(Keys.ESCAPE);
     if (pausedPressed)
       model.setPaused(!model.isPaused());
@@ -42,12 +44,13 @@ public class GameController extends AbstractController<Game, GameView> {
 
   @Override
   public void update(float deltaTime) {
+    Game game = getModel();
     GdxAI.getTimepiece().update(deltaTime);
 
     if (Gdx.input.isKeyJustPressed(Keys.F11)) {
-      model.setFullscreen(!model.isFullscreen());
+      game.setFullscreen(!game.isFullscreen());
 
-      if (model.isFullscreen()) {
+      if (game.isFullscreen()) {
         Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
       }
       else {
@@ -57,8 +60,8 @@ public class GameController extends AbstractController<Game, GameView> {
 
     // if we aren't paused (basically)
     if (deltaTime > 0) {
-      Gladiator player = model.getPlayer().orElse(null);
-      OrthographicCamera camera = model.getCamera();
+      Gladiator player = game.getPlayer().orElse(null);
+      OrthographicCamera camera = game.getCamera();
 
       if (player != null) {
         camera.position.x += (player.getX() - camera.position.x) * 2 * deltaTime;
@@ -66,11 +69,13 @@ public class GameController extends AbstractController<Game, GameView> {
         camera.update();
       }
 
-      model.getWorldController().ifPresent(controller -> controller.update(deltaTime));
+      if (worldController != null)
+        worldController.update(deltaTime);
     }
   }
 
   public void resize(int screenWidth, int screenHeight) {
-    model.getViewport().update(screenWidth, screenHeight);
+    Game game = getModel();
+    game.getViewport().update(screenWidth, screenHeight);
   }
 }

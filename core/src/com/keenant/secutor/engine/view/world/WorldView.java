@@ -6,31 +6,45 @@ import com.keenant.secutor.engine.controller.EntityController;
 import com.keenant.secutor.engine.model.Entity;
 import com.keenant.secutor.engine.model.world.World;
 import com.keenant.secutor.engine.view.AbstractView;
+import com.keenant.secutor.engine.view.View;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class WorldView extends AbstractView<World> {
+  private final Map<Entity, View> views = new HashMap<>();
+
   public WorldView(World model) {
     super(model);
   }
 
+  public void setView(Entity entity, View view) {
+    views.put(entity, view);
+  }
+
   @Override
   public void render(SpriteBatch batch, float deltaTime) {
+    World world = getModel();
+
     batch.draw(Assets.BACKGROUND, 0, 0);
 
-    List<EntityController<?, ?>> controllers = new ArrayList<>(model.getEntities());
+    List<Entity> entities = new ArrayList<>(world.getEntities());
 
-    controllers.sort((c1, c2) -> {
-      Entity e1 = c1.getModel();
-      Entity e2 = c2.getModel();
+    // sort by y descending
+    entities.sort((e1, e2) -> Float.compare(e2.getY(), e1.getY()));
 
-      return Float.compare(e2.getY(), e1.getY());
-    });
+    for (Entity entity : entities) {
+      if (!views.containsKey(entity)) {
+        System.out.println("Missing view for: " + entity);
+        continue;
+      }
 
-    for (EntityController controller : controllers) {
-      controller.getView().render(batch, deltaTime);
+      views.get(entity).render(batch, deltaTime);
     }
+  }
 
-//    batch.draw(SecutorAssets.WHITE, 0, 0, 16, 16);
+  public void removeEntity(Entity remove) {
+    views.remove(remove);
   }
 }

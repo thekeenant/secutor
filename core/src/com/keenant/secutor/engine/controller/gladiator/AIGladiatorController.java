@@ -62,6 +62,8 @@ public class AIGladiatorController extends GladiatorController<AIGladiator> {
 
   @Override
   public void update(float deltaTime) {
+    AIGladiator model = getModel();
+
     tree.step();
 
     Vector2 position = model.getPosition();

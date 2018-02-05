@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.keenant.secutor.Constants;
 import com.keenant.secutor.animation.GladiatorAnimationState;
 import com.keenant.secutor.engine.controller.EntityController;
+import com.keenant.secutor.engine.model.Entity;
 import com.keenant.secutor.engine.model.gladiator.AIGladiator;
 import com.keenant.secutor.engine.model.gladiator.Gladiator;
 import com.keenant.secutor.engine.view.gladiator.GladiatorView;
@@ -12,17 +13,20 @@ import com.keenant.secutor.utils.Direction;
 import com.keenant.secutor.utils.GameAnimation;
 import com.keenant.secutor.utils.Utils;
 
-public class GladiatorController<M extends Gladiator> extends EntityController<M, GladiatorView> {
-  public GladiatorController(M model, GladiatorView view) {
+public class GladiatorController<M extends Gladiator> extends EntityController<M, GladiatorView<M>> {
+  public GladiatorController(M model, GladiatorView<M> view) {
     super(model, view);
   }
 
   public GladiatorController(M model) {
-    this(model, new GladiatorView(model));
+    this(model, new GladiatorView<>(model));
   }
 
   @Override
   public void update(float deltaTime) {
+    Gladiator model = getModel();
+    GladiatorView<M> view = getView();
+
     GameAnimation<GladiatorAnimationState> animation = view.currentAnimation();
 
     if (model.isAttacking()) {
@@ -32,8 +36,6 @@ public class GladiatorController<M extends Gladiator> extends EntityController<M
     }
 
     if (model.isAttacking()) {
-      GladiatorAnimationState animationState = view.currentAnimationState();
-
       if (model instanceof AIGladiator) {
         AIGladiator ai = (AIGladiator) model;
         ai.getEnemy().ifPresent(enemy -> {
@@ -99,55 +101,50 @@ public class GladiatorController<M extends Gladiator> extends EntityController<M
         feet.height
     );
 
-
-
     boolean allowedXY = true;
     boolean allowedX = true;
     boolean allowedY = true;
 
-    for (EntityController<?, ?> controller : getModel().getWorld().getEntities()) {
-      if (controller.equals(this))
-        continue;
-
-      if (controller.getModel() instanceof Gladiator) {
-        Gladiator other = (Gladiator) controller.getModel();
-
-        if (other.isColliding(boundingBox)) {
-          allowedXY = false;
-        }
-
-        if (other.isColliding(boundingBoxX)) {
-          allowedX = false;
-        }
-
-        if (other.isColliding(boundingBoxY)) {
-          allowedY = false;
-        }
-
-        if (other.isColliding(boundingBox, 1F)) {
-          float randomness = 0.1F;
-          float randomX = (Utils.random().nextFloat() - 0.5f) * randomness;
-          float randomY = (Utils.random().nextFloat() - 0.5f) * randomness;
-
-          Vector2 push = other.getPosition().cpy().sub(nextPos).nor().scl(1.5F).add(randomX, randomY);
-          other.setVelocity(push.x, push.y);
-        }
-      }
-    }
-
-    if (this instanceof UserGladiatorController)
-      allowedXY = true;
-
-    if (!allowedXY) {
-      if (allowedX) {
-        nextPos.y = model.getY();
-        boundingBox = boundingBoxX;
-      }
-      else if (allowedY) {
-        nextPos.x = model.getX();
-        boundingBox = boundingBoxY;
-      }
-    }
+//    for (Entity entity : getModel().getWorld().getEntities()) {
+//      if (entity.equals(model))
+//        continue;
+//
+//      if (entity instanceof Gladiator) {
+//        Gladiator other = (Gladiator) entity;
+//
+//        if (other.isColliding(boundingBox)) {
+//          allowedXY = false;
+//        }
+//
+//        if (other.isColliding(boundingBoxX)) {
+//          allowedX = false;
+//        }
+//
+//        if (other.isColliding(boundingBoxY)) {
+//          allowedY = false;
+//        }
+//
+//        if (other.isColliding(boundingBox, 1F)) {
+//          float randomness = 0.0F;
+//          float randomX = (Utils.random().nextFloat() - 0.5f) * randomness;
+//          float randomY = (Utils.random().nextFloat() - 0.5f) * randomness;
+//
+//          Vector2 push = other.getPosition().cpy().sub(nextPos).nor().scl(1.5F).add(randomX, randomY);
+//          other.setVelocity(push.x, push.y);
+//        }
+//      }
+//    }
+//
+//    if (model instanceof AIGladiator && !allowedXY) {
+//      if (allowedX) {
+//        nextPos.y = model.getY();
+//        boundingBox = boundingBoxX;
+//      }
+//      else if (allowedY) {
+//        nextPos.x = model.getX();
+//        boundingBox = boundingBoxY;
+//      }
+//    }
 
     if (allowedXY || allowedX || allowedY) {
       model.setPosition(nextPos.x, nextPos.y);
