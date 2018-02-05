@@ -1,6 +1,5 @@
 package com.keenant.secutor.network;
 
-import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -21,7 +20,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
-public class SecutorClient extends Listener {
+public class SecutorClient extends Listener implements SecutorEndPoint {
   private final Client client;
   private final Game game;
 
@@ -33,7 +32,7 @@ public class SecutorClient extends Listener {
   public void start() throws IOException {
     Packet.register(client);
     client.start();
-    client.connect(2000, "localhost", 24602);
+    client.connect(1000, "localhost", 24602);
     client.addListener(this);
 
     performLogin();
@@ -42,32 +41,6 @@ public class SecutorClient extends Listener {
   public void performLogin() {
     LoginPacket login = new LoginPacket(UUID.randomUUID(), "RandomName" + Utils.random().nextInt(10));
     client.sendTCP(login);
-  }
-
-  float a = 0;
-  float b = 0;
-
-  public void update() {
-    // todo: temp function
-    a += Gdx.graphics.getDeltaTime();
-    b += Gdx.graphics.getDeltaTime();
-
-    Gladiator player = game.getPlayer().orElse(null);
-
-    if (player == null)
-      return;
-
-    if (a > 0.01) {
-      a = 0;
-
-      client.sendTCP(new MovePacket(player.getUuid(), player.getMovement()));
-    }
-    if (b > 0.1) {
-      b = 0;
-
-      client.sendTCP(new AttackPacket(player.getUuid(), player.isAttacking()));
-      client.sendTCP(new UpdatePositionPacket(player.getUuid(), player.getPosition()));
-    }
   }
 
   @Override
@@ -146,5 +119,10 @@ public class SecutorClient extends Listener {
         gladiator.setPosition(packet.position.x, packet.position.y);
       }
     }
+  }
+
+  @Override
+  public void broadcast(Object packet) {
+    client.sendTCP(packet);
   }
 }

@@ -45,7 +45,6 @@ public class GameController extends AbstractController<Game, GameView> {
   @Override
   public void update(float deltaTime) {
     Game game = getModel();
-
     GdxAI.getTimepiece().update(deltaTime);
 
     if (Gdx.input.isKeyJustPressed(Keys.F11)) {

@@ -18,7 +18,7 @@ import com.keenant.secutor.network.packet.UpdatePositionPacket;
 import com.keenant.secutor.network.packet.WorldSetupPacket;
 import java.io.IOException;
 
-public class SecutorServer extends Listener {
+public class SecutorServer extends Listener implements SecutorEndPoint {
   private final Server server;
   private final Game game;
 
@@ -116,5 +116,10 @@ public class SecutorServer extends Listener {
 
       server.sendToAllExceptTCP(conn.getID(), object);
     }
+  }
+
+  @Override
+  public void broadcast(Object packet) {
+    server.sendToAllTCP(packet);
   }
 }
