@@ -2,13 +2,11 @@ package com.keenant.secutor;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.TextInputListener;
 import com.keenant.secutor.engine.controller.game.GameController;
 import com.keenant.secutor.engine.model.game.Game;
 import com.keenant.secutor.engine.model.gladiator.ClientGladiator;
 import com.keenant.secutor.engine.model.gladiator.Gladiator;
 import com.keenant.secutor.engine.model.world.World;
-import com.keenant.secutor.engine.view.game.GameView;
 import com.keenant.secutor.network.SecutorClient;
 import com.keenant.secutor.network.SecutorEndPoint;
 import com.keenant.secutor.network.SecutorServer;
@@ -41,10 +39,6 @@ public class SecutorApp extends ApplicationAdapter {
         endpoint = new SecutorClient(game);
         break;
       case SERVER:
-        endpoint = new SecutorServer(game);
-        game.setWorld(new World());
-        break;
-      default:
         World world = new World();
         game.setWorld(world);
         Gladiator player = new ClientGladiator(world, UUID.randomUUID(), "SoloMode");

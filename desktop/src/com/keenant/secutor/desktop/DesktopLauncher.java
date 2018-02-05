@@ -7,11 +7,14 @@ import com.keenant.secutor.SecutorMode;
 
 public class DesktopLauncher {
   public static void main (String[] args) {
-    SecutorMode mode = SecutorMode.valueOf(args.length > 0 ? args[0] : "SOLO");
+    SecutorMode mode = SecutorMode.CLIENT;
+
+    if (args.length > 0 && args[0].equals("-server"))
+      mode = SecutorMode.SERVER;
 
     Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
     config.setTitle("Secutor");
-    config.setInitialVisible(mode != SecutorMode.SERVER);
+    config.setInitialVisible(true);
     config.setWindowedMode(1280, 720);
     config.useVsync(true);
 
