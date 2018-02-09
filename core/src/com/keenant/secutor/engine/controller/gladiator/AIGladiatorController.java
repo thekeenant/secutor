@@ -61,7 +61,7 @@ public class AIGladiatorController extends GladiatorController<AIGladiator> {
   }
 
   @Override
-  public void update(float deltaTime) {
+  public void act(float deltaTime) {
     AIGladiator model = getModel();
 
     tree.step();
@@ -86,6 +86,6 @@ public class AIGladiatorController extends GladiatorController<AIGladiator> {
       }
     }
 
-    super.update(deltaTime);
+    super.act(deltaTime);
   }
 }

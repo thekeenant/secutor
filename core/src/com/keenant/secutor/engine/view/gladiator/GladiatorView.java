@@ -60,7 +60,7 @@ public class GladiatorView<M extends Gladiator> extends AbstractView<M> {
   }
 
   @Override
-  public void render(SpriteBatch batch, float deltaTime) {
+  public void draw(SpriteBatch batch, float deltaTime) {
     Gladiator model = getModel();
 
     GameAnimation<GladiatorAnimationState> animation = currentAnimation();

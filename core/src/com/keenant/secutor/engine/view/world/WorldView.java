@@ -2,7 +2,6 @@ package com.keenant.secutor.engine.view.world;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.keenant.secutor.Assets;
-import com.keenant.secutor.engine.controller.EntityController;
 import com.keenant.secutor.engine.model.Entity;
 import com.keenant.secutor.engine.model.world.World;
 import com.keenant.secutor.engine.view.AbstractView;
@@ -24,7 +23,7 @@ public class WorldView extends AbstractView<World> {
   }
 
   @Override
-  public void render(SpriteBatch batch, float deltaTime) {
+  public void draw(SpriteBatch batch, float deltaTime) {
     World world = getModel();
 
     batch.draw(Assets.BACKGROUND, 0, 0);
@@ -40,7 +39,7 @@ public class WorldView extends AbstractView<World> {
         continue;
       }
 
-      views.get(entity).render(batch, deltaTime);
+      views.get(entity).draw(batch, deltaTime);
     }
   }
 

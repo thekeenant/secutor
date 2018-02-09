@@ -1,18 +1,15 @@
-package com.keenant.secutor.engine.model.game;
+package com.keenant.secutor.engine;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.keenant.secutor.engine.controller.Controller;
-import com.keenant.secutor.engine.controller.game.GameController;
-import com.keenant.secutor.engine.controller.world.WorldController;
-import com.keenant.secutor.engine.model.Model;
+import com.keenant.secutor.engine.model.Entity;
 import com.keenant.secutor.engine.model.gladiator.Gladiator;
 import com.keenant.secutor.engine.model.world.World;
 import java.util.Optional;
 
-public class Game implements Model {
+public class Game {
   private static final float VIEW_WIDTH = 160;
   private static final float VIEW_HEIGHT = 90;
 
@@ -23,7 +20,7 @@ public class Game implements Model {
 
   private boolean paused;
   private World world;
-  private Gladiator player;
+  private Entity cameraTarget;
 
   private boolean fullscreen;
 
@@ -72,12 +69,12 @@ public class Game implements Model {
     this.paused = paused;
   }
 
-  public Optional<Gladiator> getPlayer() {
-    return Optional.ofNullable(player);
+  public Optional<Entity> getCameraTarget() {
+    return Optional.ofNullable(cameraTarget);
   }
 
-  public void setPlayer(Gladiator player) {
-    this.player = player;
+  public void setCameraTarget(Entity cameraTarget) {
+    this.cameraTarget = cameraTarget;
   }
 
   public boolean isFullscreen() {
@@ -86,10 +83,5 @@ public class Game implements Model {
 
   public void setFullscreen(boolean fullscreen) {
     this.fullscreen = fullscreen;
-  }
-
-  @Override
-  public GameController createController() {
-    return new GameController(this);
   }
 }

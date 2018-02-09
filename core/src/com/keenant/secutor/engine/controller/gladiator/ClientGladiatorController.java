@@ -17,7 +17,7 @@ public class ClientGladiatorController extends GladiatorController<ClientGladiat
   }
 
   @Override
-  public void update(float deltaTime) {
+  public void act(float deltaTime) {
     Gladiator model = getModel();
 
     movement.x = 0;
@@ -46,6 +46,6 @@ public class ClientGladiatorController extends GladiatorController<ClientGladiat
     movement.nor().scl(model.getSpeed() * mod);
     model.setMovement(movement.x, movement.y);
 
-    super.update(deltaTime);
+    super.act(deltaTime);
   }
 }

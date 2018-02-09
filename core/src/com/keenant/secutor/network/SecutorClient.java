@@ -82,8 +82,6 @@ public class SecutorClient extends Listener implements SecutorEndPoint {
     }
     else if (object instanceof MovePacket) {
       MovePacket packet = (MovePacket) object;
-      if (world == null)
-        return;
 
       for (Entity entity : world.getEntities()) {
         if (entity instanceof Gladiator) {
@@ -97,8 +95,6 @@ public class SecutorClient extends Listener implements SecutorEndPoint {
     }
     else if (object instanceof AttackPacket) {
       AttackPacket packet = (AttackPacket) object;
-      if (world == null)
-        return;
 
       for (Entity entity : world.getEntities()) {
         if (entity instanceof Gladiator) {

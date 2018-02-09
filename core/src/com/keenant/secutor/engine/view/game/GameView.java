@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.keenant.secutor.Assets;
-import com.keenant.secutor.engine.controller.world.WorldController;
 import com.keenant.secutor.engine.model.game.Game;
 import com.keenant.secutor.engine.model.gladiator.Gladiator;
 import com.keenant.secutor.engine.view.AbstractView;
@@ -22,7 +21,7 @@ public class GameView extends AbstractView<Game> {
   }
 
   @Override
-  public void render(SpriteBatch batch, float deltaTime) {
+  public void draw(SpriteBatch batch, float deltaTime) {
     Game game = getModel();
 
     Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
@@ -32,7 +31,7 @@ public class GameView extends AbstractView<Game> {
 
     if (worldView != null) {
       batch.begin();
-      worldView.render(batch, deltaTime);
+      worldView.draw(batch, deltaTime);
       batch.end();
     }
 

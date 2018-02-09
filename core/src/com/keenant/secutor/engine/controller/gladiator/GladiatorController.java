@@ -23,7 +23,7 @@ public class GladiatorController<M extends Gladiator> extends EntityController<M
   }
 
   @Override
-  public void update(float deltaTime) {
+  public void act(float deltaTime) {
     Gladiator model = getModel();
     GladiatorView<M> view = getView();
 

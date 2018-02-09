@@ -11,5 +11,5 @@ public interface View<M extends Model> {
 
   void setModel(M model);
 
-  void render(SpriteBatch batch, float deltaTime);
+  void draw(SpriteBatch batch, float deltaTime);
 }

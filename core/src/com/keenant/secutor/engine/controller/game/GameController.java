@@ -10,9 +10,12 @@ import com.keenant.secutor.engine.model.game.Game;
 import com.keenant.secutor.engine.model.gladiator.Gladiator;
 import com.keenant.secutor.engine.model.world.World;
 import com.keenant.secutor.engine.view.game.GameView;
+import com.keenant.secutor.event.Event;
+import net.engio.mbassy.bus.MBassador;
 
 public class GameController extends AbstractController<Game, GameView> {
   private WorldController worldController;
+  private MBassador<Event> bus = new MBassador<>();
 
   public GameController(Game model) {
     super(model, new GameView(model));
@@ -37,13 +40,13 @@ public class GameController extends AbstractController<Game, GameView> {
 
     float deltaTime = model.isPaused() ? 0 : Gdx.graphics.getDeltaTime();
 
-    // update and render views
-    update(deltaTime);
-    view.render(model.getBatch(), deltaTime);
+    // act and draw views
+    act(deltaTime);
+    view.draw(model.getBatch(), deltaTime);
   }
 
   @Override
-  public void update(float deltaTime) {
+  public void act(float deltaTime) {
     Game game = getModel();
     GdxAI.getTimepiece().update(deltaTime);
 
@@ -70,7 +73,7 @@ public class GameController extends AbstractController<Game, GameView> {
       }
 
       if (worldController != null)
-        worldController.update(deltaTime);
+        worldController.act(deltaTime);
     }
   }
 
