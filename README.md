@@ -15,4 +15,6 @@ Java 8 is the only requirement.
 * Run: `./gradlew desktop:run`
 * Distribute: `./gradlew desktop:dist` outputs to the `desktop/build/libs` folder
 
+Run a server with the flag `-server`.
+
 The `core` directory contains all the game logic and rendering.
