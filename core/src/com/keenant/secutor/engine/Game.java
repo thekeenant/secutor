@@ -41,7 +41,7 @@ public class Game {
     viewport.apply();
   }
 
-  public void render() {
+  public void render(boolean draw) {
     float deltaTime = Gdx.graphics.getDeltaTime();
 
     if (world != null) {
@@ -71,21 +71,23 @@ public class Game {
       camera.update();
     }
 
-    batch.setProjectionMatrix(camera.combined);
+    if (draw) {
+      batch.setProjectionMatrix(camera.combined);
 
-    Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
-    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+      Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
+      Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-    if (worldView != null) {
-      batch.begin();
-      worldView.draw(batch, deltaTime);
-      batch.end();
+      if (worldView != null) {
+        batch.begin();
+        worldView.draw(batch, deltaTime);
+        batch.end();
+      }
+
+      debug.begin();
+      Assets.FONT_24.getData().setScale(1.0F);
+      Assets.FONT_24.draw(debug, Gdx.graphics.getFramesPerSecond() + " fps", 0, 24);
+      debug.end();
     }
-
-    debug.begin();
-    Assets.FONT_24.getData().setScale(1.0F);
-    Assets.FONT_24.draw(debug, Gdx.graphics.getFramesPerSecond() + " fps", 0, 24);
-    debug.end();
   }
 
   public void onResize(int screenWidth, int screenHeight) {

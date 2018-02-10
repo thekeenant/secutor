@@ -72,11 +72,10 @@ public class SecutorApp extends ApplicationAdapter {
 
   @Override
   public void render() {
-    game.render();
+    game.render(!headless);
   }
 
   @Override
   public void dispose() {
-
   }
 }
