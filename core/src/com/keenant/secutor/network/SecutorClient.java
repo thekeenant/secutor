@@ -34,7 +34,7 @@ public class SecutorClient extends Listener implements SecutorEndPoint {
   public void start() throws IOException {
     Packet.register(client);
     client.start();
-    client.connect(1000, host, port);
+    client.connect(1000, host == null ? "localhost" : host, port);
     client.addListener(this);
 
     performLogin();
@@ -90,8 +90,8 @@ public class SecutorClient extends Listener implements SecutorEndPoint {
           if (entity instanceof Gladiator) {
             Gladiator gladiator = (Gladiator) entity;
 
-            if (gladiator.getUuid().equals(packet.uuid)) {
-              gladiator.setMovement(packet.movement.x, packet.movement.y);
+            if (gladiator.getUuid().equals(packet.getUuid())) {
+              gladiator.setPosition(packet.getPosition().x, packet.getPosition().y);
             }
           }
         }

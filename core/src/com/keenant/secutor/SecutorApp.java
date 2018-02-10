@@ -57,6 +57,7 @@ public class SecutorApp extends ApplicationAdapter {
       endpoint.start();
     } catch (IOException e) {
       e.printStackTrace();
+      System.exit(-1);
     }
   }
 
@@ -67,7 +68,7 @@ public class SecutorApp extends ApplicationAdapter {
 
   @Handler
   public void onEntityMove(EntityMoveEvent<?> event) {
-    endpoint.broadcast(new EntityMovePacket(event.getEntityUuid(), event.getMovement()));
+    endpoint.broadcast(new EntityMovePacket(event.getEntityUuid(), event.getTo()));
   }
 
   @Override

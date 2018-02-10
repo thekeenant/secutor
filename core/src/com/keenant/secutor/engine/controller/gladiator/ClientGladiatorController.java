@@ -42,10 +42,8 @@ public class ClientGladiatorController extends GladiatorController<ClientGladiat
 
     movement.nor().scl(model.getSpeed() * mod);
 
-    if (!model.getMovement().equals(movement)) {
+    if (!model.getMovement().equals(movement))
       model.setMovement(movement.x, movement.y);
-      game.post(new EntityMoveEvent<>(model, model.getMovement()));
-    }
 
     super.act(game, deltaTime);
   }

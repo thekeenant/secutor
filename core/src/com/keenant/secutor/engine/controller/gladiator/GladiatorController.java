@@ -8,6 +8,7 @@ import com.keenant.secutor.engine.Game;
 import com.keenant.secutor.engine.controller.EntityController;
 import com.keenant.secutor.engine.model.gladiator.Gladiator;
 import com.keenant.secutor.engine.view.gladiator.GladiatorView;
+import com.keenant.secutor.event.EntityMoveEvent;
 import com.keenant.secutor.utils.Direction;
 import com.keenant.secutor.utils.GameAnimation;
 
@@ -125,6 +126,7 @@ public class GladiatorController<M extends Gladiator> extends EntityController<M
 //    }
 
     if (allowedXY || allowedX || allowedY) {
+      game.post(new EntityMoveEvent<>(model, model.getPosition(), nextPos));
       model.setPosition(nextPos.x, nextPos.y);
       model.setBoundingBox(boundingBox);
     }

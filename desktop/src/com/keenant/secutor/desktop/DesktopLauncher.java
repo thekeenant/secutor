@@ -11,7 +11,7 @@ import com.keenant.secutor.SecutorApp;
 
 public class DesktopLauncher {
   @Parameter(names = {"--host", "-h", "-host"}, description = "Host to bind/connect to")
-  private String host = "localhost";
+  private String host;
 
   @Parameter(names = {"--port", "-p", "-port"}, description = "Port to bind/connect to")
   private int port = 24602;

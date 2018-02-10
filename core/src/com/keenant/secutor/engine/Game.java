@@ -94,7 +94,7 @@ public class Game {
     viewport.update(screenWidth, screenHeight);
   }
 
-  public Event post(Event event) {
+  public <T extends Event> T post(T event) {
     bus.publish(event);
     return event;
   }

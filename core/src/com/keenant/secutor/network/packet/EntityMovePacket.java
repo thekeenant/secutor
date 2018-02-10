@@ -4,15 +4,23 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.UUID;
 
 public class EntityMovePacket implements Packet {
-  public UUID uuid;
-  public Vector2 movement;
+  private UUID uuid;
+  private Vector2 position;
 
-  public EntityMovePacket(UUID uuid, Vector2 movement) {
+  public EntityMovePacket(UUID uuid, Vector2 position) {
     this.uuid = uuid;
-    this.movement = movement;
+    this.position = position;
   }
 
   public EntityMovePacket() {
 
+  }
+
+  public Vector2 getPosition() {
+    return position;
+  }
+
+  public UUID getUuid() {
+    return uuid;
   }
 }
