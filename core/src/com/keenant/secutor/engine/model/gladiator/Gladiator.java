@@ -13,7 +13,7 @@ public class Gladiator implements Entity, CollidableEntity {
   private final World world;
   private final UUID uuid;
   private final String name;
-  private Vector2 position;
+  private Vector2 position = new Vector2();
 
   /** walking/running movement velocity */
   private Vector2 movement = new Vector2();
@@ -33,7 +33,6 @@ public class Gladiator implements Entity, CollidableEntity {
     this.world = world;
     this.uuid = uuid;
     this.name = name;
-    position = new Vector2(0, 0);
   }
 
   public Gladiator(World world, String name) {

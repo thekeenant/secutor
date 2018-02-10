@@ -4,14 +4,13 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.keenant.secutor.Constants;
 import com.keenant.secutor.animation.GladiatorAnimationState;
+import com.keenant.secutor.engine.Game;
 import com.keenant.secutor.engine.controller.EntityController;
-import com.keenant.secutor.engine.model.Entity;
 import com.keenant.secutor.engine.model.gladiator.AIGladiator;
 import com.keenant.secutor.engine.model.gladiator.Gladiator;
 import com.keenant.secutor.engine.view.gladiator.GladiatorView;
 import com.keenant.secutor.utils.Direction;
 import com.keenant.secutor.utils.GameAnimation;
-import com.keenant.secutor.utils.Utils;
 
 public class GladiatorController<M extends Gladiator> extends EntityController<M, GladiatorView<M>> {
   public GladiatorController(M model, GladiatorView<M> view) {
@@ -23,7 +22,7 @@ public class GladiatorController<M extends Gladiator> extends EntityController<M
   }
 
   @Override
-  public void update(float deltaTime) {
+  public void act(Game game, float deltaTime) {
     Gladiator model = getModel();
     GladiatorView<M> view = getView();
 
@@ -43,7 +42,6 @@ public class GladiatorController<M extends Gladiator> extends EntityController<M
         });
       }
     }
-
 
     Vector2 velocity = model.getVelocity();
     Vector2 movement = model.getMovement();

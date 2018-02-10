@@ -1,5 +1,6 @@
 package com.keenant.secutor.engine.controller;
 
+import com.keenant.secutor.engine.Game;
 import com.keenant.secutor.engine.model.Model;
 import com.keenant.secutor.engine.view.View;
 
@@ -19,5 +20,5 @@ public interface Controller<M extends Model, V extends View<M>> {
 
   void setView(V view);
 
-  void update(float deltaTime);
+  void act(Game game, float deltaTime);
 }

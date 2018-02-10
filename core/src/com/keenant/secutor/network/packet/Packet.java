@@ -16,7 +16,7 @@ public interface Packet {
     kryo.register(JoinPacket.class);
     kryo.register(GladiatorPacket.class);
     kryo.register(LoginPacket.class);
-    kryo.register(MovePacket.class);
+    kryo.register(EntityMovePacket.class);
     kryo.register(WorldSetupPacket.class);
     kryo.register(ArrayList.class);
     kryo.register(Vector2.class);
