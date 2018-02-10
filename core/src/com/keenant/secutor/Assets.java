@@ -2,6 +2,8 @@ package com.keenant.secutor;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -30,6 +32,8 @@ public class Assets {
   public static Texture BACKGROUND;
 
   public static BitmapFont FONT_24;
+
+  public static Music AUDIO_MENU;
 
   private static AssetManager manager;
 
@@ -82,6 +86,7 @@ public class Assets {
     ));
     manager.load("background.png", Texture.class);
     manager.load("white.png", Texture.class);
+    manager.load("audio/menu.mp3", Music.class);
 
     manager.finishLoading();
 
@@ -97,6 +102,7 @@ public class Assets {
     GLADIATOR_SHADOW = manager.get("gladiator/gladiator_shadow.png");
     BACKGROUND = manager.get("background.png");
     WHITE = manager.get("white.png");
+    AUDIO_MENU = manager.get("audio/menu.mp3");
 
 
     // TODO: through manager

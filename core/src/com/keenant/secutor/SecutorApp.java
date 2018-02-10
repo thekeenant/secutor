@@ -15,19 +15,13 @@ import java.util.UUID;
 import net.engio.mbassy.listener.Handler;
 
 public class SecutorApp extends ApplicationAdapter {
-  private final String host;
-  private final int port;
-  private final boolean server;
-  private final boolean headless;
+  private final SecutorConfig config;
 
   private Game game;
   private SecutorEndPoint endpoint;
 
-  public SecutorApp(String host, int port, boolean server, boolean headless) {
-    this.host = host;
-    this.port = port;
-    this.server = server;
-    this.headless = headless;
+  public SecutorApp(SecutorConfig config) {
+    this.config = config;
   }
 
   @Override
@@ -35,22 +29,27 @@ public class SecutorApp extends ApplicationAdapter {
     // load assets
     Assets.load();
 
+    if (!config.isServer()) {
+      Assets.AUDIO_MENU.setLooping(true);
+      Assets.AUDIO_MENU.play();
+    }
+
     // create game controller
     game = new Game();
     game.subscribe(this);
 
-    if (server) {
+    if (config.isServer()) {
       World world = new World();
-      if (!headless) {
+      if (!config.isHeadless()) {
         Gladiator player = new ClientGladiator(world, UUID.randomUUID(), "Server");
         game.setCameraTarget(player);
         world.addEntity(player);
       }
       game.setWorld(world);
-      endpoint = new SecutorServer(game, host, port);
+      endpoint = new SecutorServer(game, config.getHost(), config.getPort());
     }
     else {
-      endpoint = new SecutorClient(game, host, port);
+      endpoint = new SecutorClient(game, config.getHost(), config.getPort());
     }
 
     try {
@@ -73,7 +72,9 @@ public class SecutorApp extends ApplicationAdapter {
 
   @Override
   public void render() {
-    game.render(!headless);
+    // only draw if not in headless mode
+    boolean draw = !config.isHeadless();
+    game.render(draw);
   }
 
   @Override
