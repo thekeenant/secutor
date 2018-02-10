@@ -16,32 +16,35 @@ import com.keenant.secutor.network.packet.Packet;
 import com.keenant.secutor.network.packet.UpdatePositionPacket;
 import com.keenant.secutor.network.packet.WorldSetupPacket;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 
 public class SecutorServer extends Listener implements SecutorEndPoint {
-  private final Server server;
+  private final Server server = new Server() {
+    @Override
+    protected Connection newConnection() {
+      return new SecutorConnection();
+    }
+  };
   private final Game game;
+  private final String host;
+  private final int port;
 
-  public SecutorServer(Game game) {
+  public SecutorServer(Game game, String host, int port) {
     this.game = game;
-    server = new Server() {
-      @Override
-      protected Connection newConnection() {
-        return new SecutorConnection();
-      }
-    };
+    this.host = host;
+    this.port = port;
   }
 
   public void start() throws IOException {
     Packet.register(server);
     server.start();
-    server.bind(24602);
+    server.bind(new InetSocketAddress(host, port), null);
     server.addListener(this);
   }
 
   @Override
   public void disconnected(Connection connection) {
     SecutorConnection conn = (SecutorConnection) connection;
-
 
     server.sendToAllExceptTCP(conn.getID(), new LeavePacket(conn.getUuid()));
 

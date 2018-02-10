@@ -20,18 +20,21 @@ import java.util.List;
 import java.util.UUID;
 
 public class SecutorClient extends Listener implements SecutorEndPoint {
-  private final Client client;
+  private final Client client = new Client();
   private final Game game;
+  private final String host;
+  private final int port;
 
-  public SecutorClient(Game game) {
+  public SecutorClient(Game game, String host, int port) {
     this.game = game;
-    client = new Client();
+    this.host = host;
+    this.port = port;
   }
 
   public void start() throws IOException {
     Packet.register(client);
     client.start();
-    client.connect(1000, "localhost", 24602);
+    client.connect(1000, host, port);
     client.addListener(this);
 
     performLogin();

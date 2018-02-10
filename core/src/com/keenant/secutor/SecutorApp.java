@@ -15,12 +15,19 @@ import java.util.UUID;
 import net.engio.mbassy.listener.Handler;
 
 public class SecutorApp extends ApplicationAdapter {
+  private final String host;
+  private final int port;
+  private final boolean server;
+  private final boolean headless;
+
   private Game game;
-  private final SecutorMode mode;
   private SecutorEndPoint endpoint;
 
-  public SecutorApp(SecutorMode mode) {
-    this.mode = mode;
+  public SecutorApp(String host, int port, boolean server, boolean headless) {
+    this.host = host;
+    this.port = port;
+    this.server = server;
+    this.headless = headless;
   }
 
   @Override
@@ -32,18 +39,18 @@ public class SecutorApp extends ApplicationAdapter {
     game = new Game();
     game.subscribe(this);
 
-    switch (mode) {
-      case CLIENT:
-        endpoint = new SecutorClient(game);
-        break;
-      case SERVER:
-        World world = new World();
-        game.setWorld(world);
+    if (server) {
+      World world = new World();
+      if (!headless) {
         Gladiator player = new ClientGladiator(world, UUID.randomUUID(), "Server");
         game.setCameraTarget(player);
         world.addEntity(player);
-        endpoint = new SecutorServer(game);
-        break;
+      }
+      game.setWorld(world);
+      endpoint = new SecutorServer(game, host, port);
+    }
+    else {
+      endpoint = new SecutorClient(game, host, port);
     }
 
     try {
@@ -60,7 +67,6 @@ public class SecutorApp extends ApplicationAdapter {
 
   @Handler
   public void onEntityMove(EntityMoveEvent<?> event) {
-    System.out.println(event.getMovement());
     endpoint.broadcast(new EntityMovePacket(event.getEntityUuid(), event.getMovement()));
   }
 
