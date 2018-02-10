@@ -7,12 +7,11 @@ import com.keenant.secutor.engine.Game;
 import com.keenant.secutor.engine.model.Entity;
 import com.keenant.secutor.engine.model.gladiator.Gladiator;
 import com.keenant.secutor.engine.model.world.World;
-import com.keenant.secutor.network.packet.AttackPacket;
-import com.keenant.secutor.network.packet.JoinPacket;
+import com.keenant.secutor.network.packet.EntityMovePacket;
 import com.keenant.secutor.network.packet.GladiatorPacket;
+import com.keenant.secutor.network.packet.JoinPacket;
 import com.keenant.secutor.network.packet.LeavePacket;
 import com.keenant.secutor.network.packet.LoginPacket;
-import com.keenant.secutor.network.packet.EntityMovePacket;
 import com.keenant.secutor.network.packet.Packet;
 import com.keenant.secutor.network.packet.UpdatePositionPacket;
 import com.keenant.secutor.network.packet.WorldSetupPacket;
@@ -85,20 +84,6 @@ public class SecutorServer extends Listener implements SecutorEndPoint {
 
           if (gladiator.getUuid().equals(packet.uuid)) {
             gladiator.setMovement(packet.movement.x, packet.movement.y);
-          }
-        }
-      }
-
-      server.sendToAllExceptTCP(conn.getID(), object);
-    }
-    else if (object instanceof AttackPacket) {
-      AttackPacket packet = (AttackPacket) object;
-      for (Entity entity : world.getEntities()) {
-        if (entity instanceof Gladiator) {
-          Gladiator gladiator = (Gladiator) entity;
-
-          if (gladiator.getUuid().equals(packet.uuid)) {
-            gladiator.setAttacking(packet.attacking);
           }
         }
       }

@@ -35,7 +35,7 @@ public class GladiatorView<M extends Gladiator> extends AbstractView<M> {
     float drawX = model.getX();
     float drawY = model.getY() + 18;
     float width = 4;
-    float health = model.getHealth() / model.getMaxHealth();
+    float health = 1.0F;
 
     green.setPosition(drawX, drawY);
     green.setScale(width * health, 1);
@@ -80,9 +80,6 @@ public class GladiatorView<M extends Gladiator> extends AbstractView<M> {
     renderName(batch);
 
     stateTime += deltaTime;
-    if (model.isAttacking()) {
-      model.setAttackingTime(model.getAttackingTime() + deltaTime);
-    }
   }
 
   public GameAnimation<GladiatorAnimationState> currentAnimation() {
@@ -91,34 +88,19 @@ public class GladiatorView<M extends Gladiator> extends AbstractView<M> {
     Direction facing = model.getFacing();
     switch (facing) {
       case UP:
-        if (model.isAttacking())
-          return Assets.GLADIATOR_UP_ATTACK;
-        else
-          return Assets.GLADIATOR_UP;
+        return Assets.GLADIATOR_UP;
       case DOWN:
-        if (model.isAttacking())
-          return Assets.GLADIATOR_DOWN_ATTACK;
-        else
-          return Assets.GLADIATOR_DOWN;
+        return Assets.GLADIATOR_DOWN;
       case LEFT:
-        if (model.isAttacking())
-          return Assets.GLADIATOR_LEFT_ATTACK;
-        else
-          return Assets.GLADIATOR_LEFT;
+        return Assets.GLADIATOR_LEFT;
       case RIGHT:
-        if (model.isAttacking())
-          return Assets.GLADIATOR_RIGHT_ATTACK;
-        else
-          return Assets.GLADIATOR_RIGHT;
+        return Assets.GLADIATOR_RIGHT;
       default:
         return Assets.GLADIATOR_DOWN;
     }
   }
 
   public GladiatorAnimationState currentAnimationState() {
-    Gladiator model = getModel();
-
-    float stateTime = model.isAttacking() ? model.getAttackingTime() : this.stateTime;
     return currentAnimation().getState(stateTime);
   }
 }

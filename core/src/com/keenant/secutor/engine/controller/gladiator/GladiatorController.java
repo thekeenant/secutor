@@ -6,7 +6,6 @@ import com.keenant.secutor.Constants;
 import com.keenant.secutor.animation.GladiatorAnimationState;
 import com.keenant.secutor.engine.Game;
 import com.keenant.secutor.engine.controller.EntityController;
-import com.keenant.secutor.engine.model.gladiator.AIGladiator;
 import com.keenant.secutor.engine.model.gladiator.Gladiator;
 import com.keenant.secutor.engine.view.gladiator.GladiatorView;
 import com.keenant.secutor.utils.Direction;
@@ -26,33 +25,11 @@ public class GladiatorController<M extends Gladiator> extends EntityController<M
     Gladiator model = getModel();
     GladiatorView<M> view = getView();
 
-    GameAnimation<GladiatorAnimationState> animation = view.currentAnimation();
-
-    if (model.isAttacking()) {
-      if (animation.isAnimationFinished(model.getAttackingTime())) {
-        model.setAttacking(false);
-      }
-    }
-
-    if (model.isAttacking()) {
-      if (model instanceof AIGladiator) {
-        AIGladiator ai = (AIGladiator) model;
-        ai.getEnemy().ifPresent(enemy -> {
-          enemy.setHealth(Math.max(0, enemy.getHealth() - 0.2F));
-        });
-      }
-    }
-
     Vector2 velocity = model.getVelocity();
     Vector2 movement = model.getMovement();
 
-    if (model.isAttacking()) {
-      movement.scl(0.5F);
-    }
-    else {
-      if (!movement.isZero())
-        model.setFacing(Direction.fromVector(movement.cpy()));
-    }
+    if (!movement.isZero())
+      model.setFacing(Direction.fromVector(movement.cpy()));
 
     Vector2 change = velocity.cpy();
     // only allow movement if they are stronger than the force being applied to them
@@ -75,6 +52,9 @@ public class GladiatorController<M extends Gladiator> extends EntityController<M
       velocity.sub(deceleration);
     }
 
+
+    // TODO: Perform collision handling elsewhere...?
+    
     GladiatorAnimationState animationState = view.currentAnimationState();
     Rectangle feet = animationState.getFeetBox();
 

@@ -39,7 +39,7 @@ public class SecutorApp extends ApplicationAdapter {
       case SERVER:
         World world = new World();
         game.setWorld(world);
-        Gladiator player = new ClientGladiator(world, UUID.randomUUID(), "SoloMode");
+        Gladiator player = new ClientGladiator(world, UUID.randomUUID(), "Server");
         game.setCameraTarget(player);
         world.addEntity(player);
         endpoint = new SecutorServer(game);

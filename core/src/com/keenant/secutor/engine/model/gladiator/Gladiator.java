@@ -24,11 +24,6 @@ public class Gladiator implements Entity, CollidableEntity {
   private Rectangle boundingBox = new Rectangle();
   private Direction facing = Direction.DOWN;
 
-  private boolean attacking;
-  private float attackingTime;
-
-  private float health = getMaxHealth();
-
   public Gladiator(World world, UUID uuid, String name) {
     this.world = world;
     this.uuid = uuid;
@@ -89,37 +84,6 @@ public class Gladiator implements Entity, CollidableEntity {
   @Override
   public Rectangle getBoundingBox() {
     return boundingBox;
-  }
-
-  public void setHealth(float health) {
-    this.health = health;
-  }
-
-  public float getHealth() {
-    return health;
-  }
-
-  public float getMaxHealth() {
-    return 100F;
-  }
-
-  public boolean isAttacking() {
-    return attacking;
-  }
-
-  public void setAttacking(boolean attacking) {
-    if (attacking)
-      attackingTime = 0;
-
-    this.attacking = attacking;
-  }
-
-  public float getAttackingTime() {
-    return attackingTime;
-  }
-
-  public void setAttackingTime(float attackingTime) {
-    this.attackingTime = attackingTime;
   }
 
   @Override

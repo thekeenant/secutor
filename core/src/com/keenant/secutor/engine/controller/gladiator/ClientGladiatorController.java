@@ -38,12 +38,6 @@ public class ClientGladiatorController extends GladiatorController<ClientGladiat
       movement.x += 1;
     }
 
-    if (Gdx.input.isKeyJustPressed(Keys.SPACE)) {
-      if (!model.isAttacking()) {
-        model.setAttacking(true);
-      }
-    }
-
     float mod = Gdx.input.isKeyPressed(Keys.SHIFT_LEFT) ? 2F : 1F;
 
     movement.nor().scl(model.getSpeed() * mod);
