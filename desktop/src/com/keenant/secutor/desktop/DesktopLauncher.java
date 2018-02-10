@@ -8,22 +8,22 @@ import com.beust.jcommander.ParameterException;
 import com.keenant.secutor.SecutorApp;
 
 public class DesktopLauncher {
-  @Parameter(names = {"--host", "-h", "-host"})
+  @Parameter(names = {"--host", "-h", "-host"}, description = "Host to bind/connect to")
   private String host = "localhost";
 
-  @Parameter(names = {"--port", "-p", "-port"})
+  @Parameter(names = {"--port", "-p", "-port"}, description = "Port to bind/connect to")
   private int port = 24602;
 
-  @Parameter(names = {"--server", "-server"})
+  @Parameter(names = {"--server", "-server"}, description = "Server mode")
   private boolean server;
 
-  @Parameter(names = {"--headless", "-headless"})
+  @Parameter(names = {"--headless", "-headless"}, description = "Server in headless mode has no player, renders no display")
   private boolean headless;
 
-  @Parameter(names = {"--no-vsync", "-no-vsync"})
+  @Parameter(names = {"--no-vsync", "-no-vsync"}, description = "Disables vsync")
   private boolean vsync = true;
 
-  @Parameter(names = {"--help", "-help"}, help = true)
+  @Parameter(names = {"--help", "-help"}, help = true, description = "Display command help")
   private boolean help;
 
   public static void main(String[] args) {
