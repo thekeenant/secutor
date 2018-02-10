@@ -1,5 +1,6 @@
 package com.keenant.secutor.engine.controller.world;
 
+import com.keenant.secutor.engine.Game;
 import com.keenant.secutor.engine.controller.AbstractController;
 import com.keenant.secutor.engine.controller.EntityController;
 import com.keenant.secutor.engine.model.Entity;
@@ -15,25 +16,14 @@ public class WorldController extends AbstractController<World, WorldView> {
     super(model, new WorldView(model));
   }
 
-  private void setupEntity(Entity entity) {
-    WorldView view = getView();
-
-    EntityController<?, ?> controller = entity.createController();
-    controllers.put(entity, controller);
-    view.setView(entity, controller.getView());
-  }
-
   private EntityController<?, ?> getController(Entity entity) {
-    EntityController<?, ?> controller = controllers.get(entity);
-    if (controller == null) {
-      setupEntity(entity);
-      return getController(entity);
-    }
+    EntityController<?, ?> controller = controllers.computeIfAbsent(entity, Entity::createController);
+    getView().setView(entity, controller.getView());
     return controller;
   }
 
   @Override
-  public void act(float deltaTime) {
+  public void act(Game game, float deltaTime) {
     World world = getModel();
 
     while (!world.getEntitiesToRemove().isEmpty()) {
@@ -45,7 +35,7 @@ public class WorldController extends AbstractController<World, WorldView> {
 
     for (Entity entity : world.getEntities()) {
       EntityController<?, ?> controller = getController(entity);
-      controller.act(deltaTime);
+      controller.act(game, deltaTime);
     }
   }
 }

@@ -3,8 +3,10 @@ package com.keenant.secutor.engine.controller.gladiator;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
+import com.keenant.secutor.engine.Game;
 import com.keenant.secutor.engine.model.gladiator.ClientGladiator;
 import com.keenant.secutor.engine.model.gladiator.Gladiator;
+import com.keenant.secutor.event.EntityMoveEvent;
 
 /**
  * Controls the client's gladiator.
@@ -17,7 +19,7 @@ public class ClientGladiatorController extends GladiatorController<ClientGladiat
   }
 
   @Override
-  public void act(float deltaTime) {
+  public void act(Game game, float deltaTime) {
     Gladiator model = getModel();
 
     movement.x = 0;
@@ -37,15 +39,20 @@ public class ClientGladiatorController extends GladiatorController<ClientGladiat
     }
 
     if (Gdx.input.isKeyJustPressed(Keys.SPACE)) {
-      if (!model.isAttacking())
+      if (!model.isAttacking()) {
         model.setAttacking(true);
+      }
     }
 
     float mod = Gdx.input.isKeyPressed(Keys.SHIFT_LEFT) ? 2F : 1F;
 
     movement.nor().scl(model.getSpeed() * mod);
-    model.setMovement(movement.x, movement.y);
 
-    super.act(deltaTime);
+    if (!model.getMovement().equals(movement)) {
+      model.setMovement(movement.x, movement.y);
+      game.post(new EntityMoveEvent<>(model, model.getMovement()));
+    }
+
+    super.act(game, deltaTime);
   }
 }

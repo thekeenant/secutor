@@ -15,6 +15,7 @@ import com.keenant.secutor.ai.EnemyIsAttackingCondition;
 import com.keenant.secutor.ai.EvadeTask;
 import com.keenant.secutor.ai.SetEnemyDestinationTask;
 import com.keenant.secutor.ai.WanderTask;
+import com.keenant.secutor.engine.Game;
 import com.keenant.secutor.engine.model.gladiator.AIGladiator;
 import com.keenant.secutor.engine.view.gladiator.GladiatorView;
 import com.keenant.secutor.utils.Direction;
@@ -61,7 +62,7 @@ public class AIGladiatorController extends GladiatorController<AIGladiator> {
   }
 
   @Override
-  public void act(float deltaTime) {
+  public void act(Game game, float deltaTime) {
     AIGladiator model = getModel();
 
     tree.step();
@@ -86,6 +87,6 @@ public class AIGladiatorController extends GladiatorController<AIGladiator> {
       }
     }
 
-    super.act(deltaTime);
+    super.act(game, deltaTime);
   }
 }
