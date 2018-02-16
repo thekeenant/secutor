@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.keenant.secutor.Assets;
+import com.keenant.secutor.Constants;
 import com.keenant.secutor.engine.controller.world.WorldController;
 import com.keenant.secutor.engine.model.Entity;
 import com.keenant.secutor.engine.model.gladiator.ClientGladiator;
@@ -19,16 +20,14 @@ import java.util.Optional;
 import net.engio.mbassy.bus.MBassador;
 
 public class Game {
-  private static final float VIEW_WIDTH = 160;
-  private static final float VIEW_HEIGHT = 90;
+  private final EventBus bus = new EventBus();
 
-  private EventBus bus = new EventBus();
+  private final OrthographicCamera camera;
+  private final Viewport viewport;
+  private final SpriteBatch batch;
+  private final SpriteBatch debug;
 
-  private OrthographicCamera camera;
-  private Viewport viewport;
   private boolean fullscreen;
-  private SpriteBatch batch;
-  private SpriteBatch debug;
 
   private WorldController worldController;
   private WorldView worldView;
@@ -37,7 +36,7 @@ public class Game {
 
   public Game() {
     camera = new OrthographicCamera();
-    viewport = new FitViewport(VIEW_WIDTH, VIEW_HEIGHT, camera);
+    viewport = new FitViewport(Constants.VIEW_WIDTH, Constants.VIEW_HEIGHT, camera);
     batch = new SpriteBatch();
     debug = new SpriteBatch();
     viewport.apply();
@@ -107,22 +106,6 @@ public class Game {
 
   public void unsubscribe(Object listener) {
     bus.unsubscribe(listener);
-  }
-
-  public SpriteBatch getBatch() {
-    return batch;
-  }
-
-  public SpriteBatch getDebug() {
-    return debug;
-  }
-
-  public OrthographicCamera getCamera() {
-    return camera;
-  }
-
-  public Viewport getViewport() {
-    return viewport;
   }
 
   public Optional<World> getWorld() {

@@ -26,6 +26,7 @@ public class DesktopLauncher {
   public static void main(String[] args) throws IOException {
     Terminal terminal = TerminalBuilder.builder()
         .system(true)
+        .dumb(true)
         .build();
 
     LineReader reader = LineReaderBuilder.builder()
@@ -34,9 +35,9 @@ public class DesktopLauncher {
 
     Log.setLogger(new Logger() {
       @Override
-      public void log(int level, String category, String message, Throwable ex) {
+      protected void print(String message) {
         reader.callWidget(LineReader.CLEAR);
-        terminal.writer().println("[" + category + "] " + message);
+        terminal.writer().println(message);
         reader.callWidget(LineReader.REDRAW_LINE);
         reader.callWidget(LineReader.REDISPLAY);
         terminal.writer().flush();
@@ -47,17 +48,14 @@ public class DesktopLauncher {
       while (true) {
         String line = null;
         try {
-          line = reader.readLine("prompt> ");
+          line = reader.readLine("secutor> ");
         } catch (UserInterruptException e) {
           System.exit(-1);
         } catch (EndOfFileException e) {
           return;
         }
-        if (line == null) {
-          continue;
-        }
 
-        System.out.println(line);
+
       }
     }).start();
 
