@@ -30,10 +30,6 @@ public class Gladiator implements Entity, CollidableEntity {
     this.name = name;
   }
 
-  public Gladiator(World world, String name) {
-    this(world, UUID.randomUUID(), name);
-  }
-
   public float getSpeed() {
     return 2.5F;
   }
@@ -76,11 +72,7 @@ public class Gladiator implements Entity, CollidableEntity {
   public void setFacing(Direction facing) {
     this.facing = facing;
   }
-
-  public void setBoundingBox(Rectangle boundingBox) {
-    this.boundingBox = boundingBox;
-  }
-
+  
   @Override
   public Rectangle getBoundingBox() {
     return boundingBox;

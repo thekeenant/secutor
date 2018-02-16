@@ -112,6 +112,10 @@ public class Assets {
     FONT_24 = gen.generateFont(param);
   }
 
+  public static void dispose() {
+    manager.dispose();
+  }
+
   public static float getProgress() {
     return manager.getProgress();
   }

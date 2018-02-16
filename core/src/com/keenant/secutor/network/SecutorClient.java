@@ -5,6 +5,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.keenant.secutor.engine.Game;
 import com.keenant.secutor.engine.model.Entity;
+import com.keenant.secutor.engine.model.gladiator.ClientGladiator;
 import com.keenant.secutor.engine.model.gladiator.Gladiator;
 import com.keenant.secutor.engine.model.world.World;
 import com.keenant.secutor.network.packet.EntityMovePacket;
@@ -54,13 +55,13 @@ public class SecutorClient extends Listener implements SecutorEndPoint {
 
       world = new World();
       List<Gladiator> gladiators = packet.createGladiators(world);
-      Gladiator client = packet.client.createClientGladiator(world);
+      ClientGladiator client = packet.client.createClientGladiator(world);
 
       for (Gladiator gladiator : gladiators)
         world.addEntity(gladiator);
       world.addEntity(client);
 
-      game.setCameraTarget(client);
+      game.setPlayer(client);
       game.setWorld(world);
 
       System.out.println("World is setup");

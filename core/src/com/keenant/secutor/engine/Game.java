@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.keenant.secutor.Assets;
 import com.keenant.secutor.engine.controller.world.WorldController;
 import com.keenant.secutor.engine.model.Entity;
+import com.keenant.secutor.engine.model.gladiator.ClientGladiator;
 import com.keenant.secutor.engine.model.world.World;
 import com.keenant.secutor.engine.view.world.WorldView;
 import com.keenant.secutor.event.Event;
@@ -31,7 +32,7 @@ public class Game {
   private WorldController worldController;
   private WorldView worldView;
   private World world;
-  private Entity cameraTarget;
+  private ClientGladiator player;
 
   public Game() {
     camera = new OrthographicCamera();
@@ -65,9 +66,9 @@ public class Game {
     if (worldController != null)
       worldController.act(this, deltaTime);
 
-    if (cameraTarget != null) {
-      camera.position.x += (cameraTarget.getX() - camera.position.x) * deltaTime;
-      camera.position.y += (cameraTarget.getY() - camera.position.y) * deltaTime;
+    if (player != null) {
+      camera.position.x += (player.getX() - camera.position.x) * deltaTime;
+      camera.position.y += (player.getY() - camera.position.y) * deltaTime;
       camera.update();
     }
 
@@ -131,11 +132,11 @@ public class Game {
     this.world = world;
   }
 
-  public Optional<Entity> getCameraTarget() {
-    return Optional.ofNullable(cameraTarget);
+  public Optional<ClientGladiator> getPlayer() {
+    return Optional.ofNullable(player);
   }
 
-  public void setCameraTarget(Entity cameraTarget) {
-    this.cameraTarget = cameraTarget;
+  public void setPlayer(ClientGladiator player) {
+    this.player = player;
   }
 }

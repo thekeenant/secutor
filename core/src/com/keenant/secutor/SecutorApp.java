@@ -2,8 +2,8 @@ package com.keenant.secutor;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.keenant.secutor.engine.Game;
+import com.keenant.secutor.engine.model.Entity;
 import com.keenant.secutor.engine.model.gladiator.ClientGladiator;
-import com.keenant.secutor.engine.model.gladiator.Gladiator;
 import com.keenant.secutor.engine.model.world.World;
 import com.keenant.secutor.event.EntityMoveEvent;
 import com.keenant.secutor.network.SecutorClient;
@@ -13,6 +13,7 @@ import com.keenant.secutor.network.packet.EntityMovePacket;
 import java.io.IOException;
 import java.util.UUID;
 import net.engio.mbassy.listener.Handler;
+import net.engio.mbassy.listener.Invoke;
 
 public class SecutorApp extends ApplicationAdapter {
   private final SecutorConfig config;
@@ -41,8 +42,8 @@ public class SecutorApp extends ApplicationAdapter {
     if (config.isServer()) {
       World world = new World();
       if (!config.isHeadless()) {
-        Gladiator player = new ClientGladiator(world, UUID.randomUUID(), "Server");
-        game.setCameraTarget(player);
+        ClientGladiator player = new ClientGladiator(world, UUID.randomUUID(), "Server");
+        game.setPlayer(player);
         world.addEntity(player);
       }
       game.setWorld(world);
@@ -67,7 +68,10 @@ public class SecutorApp extends ApplicationAdapter {
 
   @Handler
   public void onEntityMove(EntityMoveEvent<?> event) {
-    endpoint.broadcast(new EntityMovePacket(event.getEntityUuid(), event.getTo()));
+    UUID playerUuid = game.getPlayer().map(Entity::getUuid).orElse(null);
+    if (playerUuid != null) {
+      endpoint.broadcast(new EntityMovePacket(event.getEntityUuid(), event.getTo()));
+    }
   }
 
   @Override
@@ -79,5 +83,6 @@ public class SecutorApp extends ApplicationAdapter {
 
   @Override
   public void dispose() {
+    Assets.dispose();
   }
 }

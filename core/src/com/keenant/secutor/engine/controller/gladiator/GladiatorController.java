@@ -10,7 +10,6 @@ import com.keenant.secutor.engine.model.gladiator.Gladiator;
 import com.keenant.secutor.engine.view.gladiator.GladiatorView;
 import com.keenant.secutor.event.EntityMoveEvent;
 import com.keenant.secutor.utils.Direction;
-import com.keenant.secutor.utils.GameAnimation;
 
 public class GladiatorController<M extends Gladiator> extends EntityController<M, GladiatorView<M>> {
   public GladiatorController(M model, GladiatorView<M> view) {
@@ -26,6 +25,7 @@ public class GladiatorController<M extends Gladiator> extends EntityController<M
     Gladiator model = getModel();
     GladiatorView<M> view = getView();
 
+    Vector2 pos = model.getPosition();
     Vector2 velocity = model.getVelocity();
     Vector2 movement = model.getMovement();
 
@@ -40,7 +40,7 @@ public class GladiatorController<M extends Gladiator> extends EntityController<M
     change.scl(Constants.METER * deltaTime);
 
     // next position is current pos plus change
-    Vector2 nextPos = model.getPosition().cpy().add(change);
+    Vector2 nextPos = pos.cpy().add(change);
 
     // dampen velocity
     Vector2 deceleration = velocity.cpy().nor().scl(deltaTime * Constants.DECELERATION);
@@ -55,80 +55,21 @@ public class GladiatorController<M extends Gladiator> extends EntityController<M
 
 
     // TODO: Perform collision handling elsewhere...?
-    
+
     GladiatorAnimationState animationState = view.currentAnimationState();
     Rectangle feet = animationState.getFeetBox();
 
-    Rectangle boundingBox = new Rectangle(
-        nextPos.x + feet.x,
-        nextPos.y + feet.y,
-        feet.width,
-        feet.height
-    );
-
-    Rectangle boundingBoxX = new Rectangle(
-        nextPos.x + feet.x,
-        feet.y,
-        feet.width,
-        feet.height
-    );
-
-    Rectangle boundingBoxY = new Rectangle(
-        feet.x,
-        nextPos.y + feet.y,
-        feet.width,
-        feet.height
-    );
-
-    boolean allowedXY = true;
-    boolean allowedX = true;
-    boolean allowedY = true;
-
-//    for (Entity entity : getModel().getWorld().getEntities()) {
-//      if (entity.equals(model))
-//        continue;
-//
-//      if (entity instanceof Gladiator) {
-//        Gladiator other = (Gladiator) entity;
-//
-//        if (other.isColliding(boundingBox)) {
-//          allowedXY = false;
-//        }
-//
-//        if (other.isColliding(boundingBoxX)) {
-//          allowedX = false;
-//        }
-//
-//        if (other.isColliding(boundingBoxY)) {
-//          allowedY = false;
-//        }
-//
-//        if (other.isColliding(boundingBox, 1F)) {
-//          float randomness = 0.0F;
-//          float randomX = (Utils.random().nextFloat() - 0.5f) * randomness;
-//          float randomY = (Utils.random().nextFloat() - 0.5f) * randomness;
-//
-//          Vector2 push = other.getPosition().cpy().sub(nextPos).nor().scl(1.5F).add(randomX, randomY);
-//          other.setVelocity(push.x, push.y);
-//        }
-//      }
-//    }
-//
-//    if (model instanceof AIGladiator && !allowedXY) {
-//      if (allowedX) {
-//        nextPos.y = model.getY();
-//        boundingBox = boundingBoxX;
-//      }
-//      else if (allowedY) {
-//        nextPos.x = model.getX();
-//        boundingBox = boundingBoxY;
-//      }
-//    }
-
-    if (allowedXY || allowedX || allowedY) {
+    if (!model.getPosition().equals(nextPos)) {
       game.post(new EntityMoveEvent<>(model, model.getPosition(), nextPos));
       model.setPosition(nextPos.x, nextPos.y);
-      model.setBoundingBox(boundingBox);
+
+      Rectangle box = model.getBoundingBox();
+      box.set(
+          nextPos.x + feet.x,
+          nextPos.y + feet.y,
+          feet.width,
+          feet.height
+      );
     }
   }
 }

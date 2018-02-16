@@ -11,5 +11,10 @@ public interface View<M extends Model> {
 
   void setModel(M model);
 
+  /**
+   * Perform any operations to the view necessary for the model.
+   * @param batch the world sprite bitch
+   * @param deltaTime the time elapsed between updates
+   */
   void draw(SpriteBatch batch, float deltaTime);
 }

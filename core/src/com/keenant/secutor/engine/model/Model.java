@@ -8,5 +8,9 @@ import com.keenant.secutor.engine.controller.Controller;
  * It is mainly here for the sake of documentation.
  */
 public interface Model {
+  /**
+   * Generate a default model controller using this model.
+   * @return the new controller
+   */
   Controller<?, ?> createController();
 }

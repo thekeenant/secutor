@@ -20,5 +20,10 @@ public interface Controller<M extends Model, V extends View<M>> {
 
   void setView(V view);
 
+  /**
+   * Perform the necessary updates to the model
+   * @param game the game context
+   * @param deltaTime the time elapsed between updates
+   */
   void act(Game game, float deltaTime);
 }
