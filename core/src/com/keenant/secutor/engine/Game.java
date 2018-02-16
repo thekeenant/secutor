@@ -14,6 +14,7 @@ import com.keenant.secutor.engine.model.gladiator.ClientGladiator;
 import com.keenant.secutor.engine.model.world.World;
 import com.keenant.secutor.engine.view.world.WorldView;
 import com.keenant.secutor.event.Event;
+import com.keenant.secutor.utils.EventBus;
 import java.util.Optional;
 import net.engio.mbassy.bus.MBassador;
 
@@ -21,7 +22,7 @@ public class Game {
   private static final float VIEW_WIDTH = 160;
   private static final float VIEW_HEIGHT = 90;
 
-  private MBassador<Event> bus = new MBassador<>();
+  private EventBus bus = new EventBus();
 
   private OrthographicCamera camera;
   private Viewport viewport;

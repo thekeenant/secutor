@@ -1,5 +1,6 @@
 package com.keenant.secutor.network;
 
+import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
@@ -67,31 +68,32 @@ public class SecutorServer extends Listener implements SecutorEndPoint {
 
     if (object instanceof LoginPacket) {
       LoginPacket packet = (LoginPacket) object;
-      conn.setUuid(packet.uuid);
 
-      Gladiator newClient = new Gladiator(world, packet.uuid, packet.name);
+      // only allow one login
+      if (conn.getUuid() == null) {
+        conn.setUuid(packet.uuid);
 
-      // send existing world data, and the new client
-      connection.sendTCP(WorldSetupPacket.serialize(world, newClient));
+        Gladiator newClient = new Gladiator(world, packet.uuid, packet.name);
 
-      // add new client to server world
-      world.addEntity(newClient);
+        // send existing world data, and the new client
+        connection.sendTCP(WorldSetupPacket.serialize(world, newClient));
 
-      JoinPacket joinPacket = new JoinPacket(GladiatorPacket.serialize(newClient));
-      server.sendToAllExceptTCP(conn.getID(), joinPacket);
+        // add new client to server world
+        world.addEntity(newClient);
 
-      System.out.println("Client logged in and added to world: " + packet.uuid);
+        JoinPacket joinPacket = new JoinPacket(GladiatorPacket.serialize(newClient));
+        server.sendToAllExceptTCP(conn.getID(), joinPacket);
+      }
     }
     else if (object instanceof EntityMovePacket) {
       EntityMovePacket packet = (EntityMovePacket) object;
-      for (Entity entity : world.getEntities()) {
-        if (entity instanceof Gladiator) {
-          Gladiator gladiator = (Gladiator) entity;
 
-          if (gladiator.getUuid().equals(packet.getUuid())) {
-            gladiator.setPosition(packet.getPosition().x, packet.getPosition().y);
-          }
-        }
+      Entity entity = world.getEntity(packet.getUuid()).orElse(null);
+
+      if (entity != null) {
+        Vector2 position = entity.getPosition();
+        Vector2 newPosition = packet.getPosition();
+        position.set(newPosition.x, newPosition.y);
       }
 
       server.sendToAllExceptTCP(conn.getID(), object);

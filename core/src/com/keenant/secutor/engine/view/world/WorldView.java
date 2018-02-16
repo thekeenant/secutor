@@ -35,7 +35,6 @@ public class WorldView extends AbstractView<World> {
 
     for (Entity entity : entities) {
       if (!views.containsKey(entity)) {
-        System.out.println("Missing view for: " + entity);
         continue;
       }
 

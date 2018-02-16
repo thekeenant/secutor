@@ -38,10 +38,6 @@ public class SecutorClient extends Listener implements SecutorEndPoint {
     client.connect(1000, host == null ? "localhost" : host, port);
     client.addListener(this);
 
-    performLogin();
-  }
-
-  public void performLogin() {
     LoginPacket login = new LoginPacket(UUID.randomUUID(), "Client" + Utils.random().nextInt(100));
     client.sendTCP(login);
   }
@@ -63,8 +59,6 @@ public class SecutorClient extends Listener implements SecutorEndPoint {
 
       game.setPlayer(client);
       game.setWorld(world);
-
-      System.out.println("World is setup");
     }
     else if (world != null) {
       if (object instanceof JoinPacket) {
@@ -72,8 +66,6 @@ public class SecutorClient extends Listener implements SecutorEndPoint {
 
         Gladiator joinedClient = packet.gladiator.createGladiator(world);
         world.addEntity(joinedClient);
-
-        System.out.println("Gladiator joined: " + packet.gladiator.uuid);
       }
       else if (object instanceof LeavePacket) {
         LeavePacket packet = (LeavePacket) object;

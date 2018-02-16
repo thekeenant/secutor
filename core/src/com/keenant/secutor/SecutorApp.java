@@ -13,7 +13,6 @@ import com.keenant.secutor.network.packet.EntityMovePacket;
 import java.io.IOException;
 import java.util.UUID;
 import net.engio.mbassy.listener.Handler;
-import net.engio.mbassy.listener.Invoke;
 
 public class SecutorApp extends ApplicationAdapter {
   private final SecutorConfig config;
@@ -29,11 +28,6 @@ public class SecutorApp extends ApplicationAdapter {
   public void create () {
     // load assets
     Assets.load();
-
-    if (!config.isServer()) {
-      Assets.AUDIO_MENU.setLooping(true);
-      Assets.AUDIO_MENU.play();
-    }
 
     // create game controller
     game = new Game();
@@ -84,5 +78,7 @@ public class SecutorApp extends ApplicationAdapter {
   @Override
   public void dispose() {
     Assets.dispose();
+
+    System.exit(-1);
   }
 }
