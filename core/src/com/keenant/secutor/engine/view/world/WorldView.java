@@ -26,7 +26,7 @@ public class WorldView extends AbstractView<World> {
   public void draw(SpriteBatch batch, float deltaTime) {
     World world = getModel();
 
-    batch.draw(Assets.BACKGROUND, 0, 0);
+    batch.draw(Assets.BACKGROUND, -90, -50);
 
     List<Entity> entities = new ArrayList<>(world.getEntities());
 

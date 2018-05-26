@@ -67,8 +67,8 @@ public class Game {
       worldController.act(this, deltaTime);
 
     if (player != null) {
-      camera.position.x += (player.getX() - camera.position.x) * deltaTime;
-      camera.position.y += (player.getY() - camera.position.y) * deltaTime;
+      camera.position.x += (player.getX() - camera.position.x) * deltaTime * 5;
+      camera.position.y += (player.getY() - camera.position.y) * deltaTime * 5;
       camera.update();
     }
 
@@ -97,6 +97,11 @@ public class Game {
 
   public <T extends Event> T post(T event) {
     bus.publish(event);
+    return event;
+  }
+
+  public <T extends Event> T postAsync(T event) {
+    bus.publishAsync(event);
     return event;
   }
 

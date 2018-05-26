@@ -1,6 +1,7 @@
 package com.keenant.secutor;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.esotericsoftware.minlog.Log;
 import com.keenant.secutor.engine.Game;
 import com.keenant.secutor.engine.model.Entity;
 import com.keenant.secutor.engine.model.gladiator.ClientGladiator;
@@ -15,17 +16,17 @@ import java.util.UUID;
 import net.engio.mbassy.listener.Handler;
 
 public class SecutorApp extends ApplicationAdapter {
-  private final SecutorConfig config;
+  private final SecutorArgs config;
 
   private Game game;
   private SecutorEndPoint endpoint;
 
-  public SecutorApp(SecutorConfig config) {
+  public SecutorApp(SecutorArgs config) {
     this.config = config;
   }
 
   @Override
-  public void create () {
+  public void create() {
     // load assets
     Assets.load();
 
@@ -34,19 +35,27 @@ public class SecutorApp extends ApplicationAdapter {
     game.subscribe(this);
 
     if (config.isServer()) {
+      Log.info("Secutor", "Server starting...");
+      // create new world for server
       World world = new World();
+      game.setWorld(world);
+
+      // if not headless, we give the server itself a client
       if (!config.isHeadless()) {
         ClientGladiator player = new ClientGladiator(world, UUID.randomUUID(), "Server");
         game.setPlayer(player);
         world.addEntity(player);
       }
-      game.setWorld(world);
+
       endpoint = new SecutorServer(game, config.getHost(), config.getPort());
     }
     else {
+      Log.info("Secutor", "Client starting...");
+      // a client connects to a server and a gladiator is then registered
       endpoint = new SecutorClient(game, config.getHost(), config.getPort());
     }
 
+    // start the server/client running
     try {
       endpoint.start();
     } catch (IOException e) {
@@ -64,7 +73,7 @@ public class SecutorApp extends ApplicationAdapter {
   public void onEntityMove(EntityMoveEvent<?> event) {
     UUID playerUuid = game.getPlayer().map(Entity::getUuid).orElse(null);
     if (playerUuid != null) {
-      endpoint.broadcast(new EntityMovePacket(event.getEntityUuid(), event.getTo()));
+      endpoint.broadcast(new EntityMovePacket(event.getEntityUuid(), event.getTo(), event.getFacing()));
     }
   }
 

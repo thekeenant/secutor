@@ -5,20 +5,21 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import com.esotericsoftware.kryo.serializers.DefaultSerializers.EnumSerializer;
 import com.esotericsoftware.kryonet.EndPoint;
+import com.keenant.secutor.utils.Direction;
 import java.util.ArrayList;
 import java.util.UUID;
 
 public interface Packet {
-  static void register(EndPoint endpoint) {
+  static void registerPackets(EndPoint endpoint) {
     Kryo kryo = endpoint.getKryo();
-    kryo.register(EntityMovePacket.class);
-    kryo.register(GladiatorPacket.class);
-    kryo.register(JoinPacket.class);
-    kryo.register(LeavePacket.class);
-    kryo.register(LoginPacket.class);
-    kryo.register(UpdatePositionPacket.class);
-    kryo.register(WorldSetupPacket.class);
+    kryo.register(EntityMovePacket.class, 1);
+    kryo.register(GladiatorPacket.class, 2);
+    kryo.register(JoinPacket.class, 3);
+    kryo.register(LeavePacket.class, 4);
+    kryo.register(LoginPacket.class, 5);
+    kryo.register(WorldSetupPacket.class, 6);
 
     // Miscellaneous objects...
     {
@@ -36,6 +37,7 @@ public interface Packet {
           return UUID.fromString(uuidStr);
         }
       });
+      kryo.register(Direction.class, new EnumSerializer(Direction.class));
     }
   }
 }

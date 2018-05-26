@@ -1,4 +1,4 @@
-package com.keenant.secutor.animation;
+package com.keenant.secutor.engine.animation;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;

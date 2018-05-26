@@ -3,7 +3,7 @@ package com.keenant.secutor.engine.controller.gladiator;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.keenant.secutor.Constants;
-import com.keenant.secutor.animation.GladiatorAnimationState;
+import com.keenant.secutor.engine.animation.GladiatorAnimationState;
 import com.keenant.secutor.engine.Game;
 import com.keenant.secutor.engine.controller.EntityController;
 import com.keenant.secutor.engine.model.gladiator.Gladiator;
@@ -29,8 +29,12 @@ public class GladiatorController<M extends Gladiator> extends EntityController<M
     Vector2 velocity = model.getVelocity();
     Vector2 movement = model.getMovement();
 
-    if (!movement.isZero())
-      model.setFacing(Direction.fromVector(movement.cpy()));
+    Direction facing = model.getFacing();
+
+    if (!movement.isZero()) {
+      facing = Direction.fromVector(movement.cpy());
+      model.setFacing(facing);
+    }
 
     Vector2 change = velocity.cpy();
     // only allow movement if they are stronger than the force being applied to them
@@ -53,14 +57,11 @@ public class GladiatorController<M extends Gladiator> extends EntityController<M
       velocity.sub(deceleration);
     }
 
-
-    // TODO: Perform collision handling elsewhere...?
-
     GladiatorAnimationState animationState = view.currentAnimationState();
     Rectangle feet = animationState.getFeetBox();
 
     if (!model.getPosition().equals(nextPos)) {
-      game.post(new EntityMoveEvent<>(model, model.getPosition(), nextPos));
+      game.post(new EntityMoveEvent<>(model, model.getPosition(), nextPos, facing));
       model.setPosition(nextPos.x, nextPos.y);
 
       Rectangle box = model.getBoundingBox();

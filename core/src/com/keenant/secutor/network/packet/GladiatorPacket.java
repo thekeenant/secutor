@@ -5,6 +5,7 @@ import com.keenant.secutor.engine.model.Entity;
 import com.keenant.secutor.engine.model.gladiator.ClientGladiator;
 import com.keenant.secutor.engine.model.gladiator.Gladiator;
 import com.keenant.secutor.engine.model.world.World;
+import com.keenant.secutor.utils.Direction;
 import java.util.UUID;
 
 public class GladiatorPacket implements Packet {
@@ -13,13 +14,15 @@ public class GladiatorPacket implements Packet {
   public Vector2 position;
   public Vector2 movement;
   public Vector2 velocity;
+  public Direction facing;
 
-  public GladiatorPacket(UUID uuid, String name, Vector2 position, Vector2 movement, Vector2 velocity) {
+  public GladiatorPacket(UUID uuid, String name, Vector2 position, Vector2 movement, Vector2 velocity, Direction facing) {
     this.uuid = uuid;
     this.name = name;
     this.position = position;
     this.movement = movement;
     this.velocity = velocity;
+    this.facing = facing;
   }
 
   public GladiatorPacket() {
@@ -28,20 +31,21 @@ public class GladiatorPacket implements Packet {
 
   public ClientGladiator createClientGladiator(World world) {
     ClientGladiator client = new ClientGladiator(world, uuid, name);
-    setGladiator(client);
+    syncGladiator(client);
     return client;
   }
 
   public Gladiator createGladiator(World world) {
     Gladiator gladiator = new Gladiator(world, uuid, name);
-    setGladiator(gladiator);
+    syncGladiator(gladiator);
     return gladiator;
   }
 
-  private void setGladiator(Gladiator gladiator) {
+  private void syncGladiator(Gladiator gladiator) {
     gladiator.setPosition(position.x, position.y);
     gladiator.setMovement(movement.x, movement.y);
     gladiator.setVelocity(velocity.x, velocity.y);
+    gladiator.setFacing(facing);
   }
 
   public static GladiatorPacket serialize(Entity entity) {
@@ -56,7 +60,8 @@ public class GladiatorPacket implements Packet {
         gladiator.getName(),
         gladiator.getPosition(),
         gladiator.getMovement(),
-        gladiator.getVelocity()
+        gladiator.getVelocity(),
+        gladiator.getFacing()
     );
   }
 }

@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.keenant.secutor.Assets;
-import com.keenant.secutor.animation.GladiatorAnimationState;
+import com.keenant.secutor.engine.animation.GladiatorAnimationState;
 import com.keenant.secutor.engine.model.gladiator.Gladiator;
 import com.keenant.secutor.engine.view.AbstractView;
 import com.keenant.secutor.utils.Direction;

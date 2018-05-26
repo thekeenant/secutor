@@ -61,6 +61,10 @@ public class Gladiator implements Entity, CollidableEntity {
     position.set(x, y);
   }
 
+  public void setPosition(Vector2 position) {
+    setPosition(position.x, position.y);
+  }
+
   public World getWorld() {
     return world;
   }

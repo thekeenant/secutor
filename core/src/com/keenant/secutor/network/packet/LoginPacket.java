@@ -2,9 +2,12 @@ package com.keenant.secutor.network.packet;
 
 import java.util.UUID;
 
+/**
+ * Client requests to login to server.
+ */
 public class LoginPacket implements Packet {
-  public UUID uuid;
-  public String name;
+  private UUID uuid;
+  private String name;
 
   public LoginPacket(UUID uuid, String name) {
     this.uuid = uuid;
@@ -13,5 +16,13 @@ public class LoginPacket implements Packet {
 
   public LoginPacket() {
 
+  }
+
+  public UUID getUuid() {
+    return uuid;
+  }
+
+  public String getName() {
+    return name;
   }
 }

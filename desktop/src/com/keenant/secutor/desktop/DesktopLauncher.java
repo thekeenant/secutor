@@ -6,61 +6,27 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.esotericsoftware.minlog.Log;
-import com.esotericsoftware.minlog.Log.Logger;
 import com.keenant.secutor.SecutorApp;
-import com.keenant.secutor.SecutorConfig;
+import com.keenant.secutor.SecutorArgs;
+import com.keenant.secutor.utils.SimpleLogger;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import org.jline.reader.EndOfFileException;
-import org.jline.reader.LineReader;
-import org.jline.reader.LineReaderBuilder;
-import org.jline.reader.UserInterruptException;
-import org.jline.terminal.Terminal;
-import org.jline.terminal.TerminalBuilder;
 
 public class DesktopLauncher {
   @Parameter(names = {"--help", "-help"}, help = true, description = "Display command help")
   private boolean help;
 
-  public static void main(String[] args) throws IOException {
-    Terminal terminal = TerminalBuilder.builder()
-        .system(true)
-        .dumb(true)
-        .build();
+  /**
+   * Main method for the desktop application. Configures logging, launches the app
+   * with configuration based on arguments provided.
+   * @param args args to parse
+   */
+  public static void main(String[] args) {
+    Log.setLogger(new SimpleLogger());
 
-    LineReader reader = LineReaderBuilder.builder()
-        .terminal(terminal)
-        .build();
+    Log.info("Secutor", "DesktopLauncher starting...");
 
-    Log.setLogger(new Logger() {
-      @Override
-      protected void print(String message) {
-        reader.callWidget(LineReader.CLEAR);
-        terminal.writer().println(message);
-        reader.callWidget(LineReader.REDRAW_LINE);
-        reader.callWidget(LineReader.REDISPLAY);
-        terminal.writer().flush();
-      }
-    });
-
-    new Thread(() -> {
-      while (true) {
-        String line = null;
-        try {
-          line = reader.readLine("secutor> ");
-        } catch (UserInterruptException e) {
-          System.exit(-1);
-        } catch (EndOfFileException e) {
-          return;
-        }
-
-
-      }
-    }).start();
-
-
-    SecutorConfig config = new SecutorConfig();
+    // store args into config/launcher
+    SecutorArgs config = new SecutorArgs();
     DesktopLauncher launcher = new DesktopLauncher();
     JCommander commander = JCommander.newBuilder()
         .addObject(launcher)
@@ -69,25 +35,35 @@ public class DesktopLauncher {
     try {
       commander.parse(args);
     } catch (ParameterException e) {
+      e.printStackTrace();
       e.usage();
       return;
     }
-    launcher.run(commander, config);
-  }
 
-  private void run(JCommander commander, SecutorConfig config) {
-    if (help) {
+    // display help instead of launching app
+    if (launcher.help) {
       commander.usage();
       return;
     }
 
+    // run the game!
+    launcher.run(config);
+  }
+
+  /**
+   * Execute the desktop lwjgl3 application.
+   * @param args
+   */
+  private void run(SecutorArgs args) {
+    // configure lwjgl3
     Lwjgl3ApplicationConfiguration lwjglConfig = new Lwjgl3ApplicationConfiguration();
     lwjglConfig.setTitle("Secutor");
-    lwjglConfig.setInitialVisible(!config.isHeadless());
+    lwjglConfig.setInitialVisible(!args.isHeadless());
     lwjglConfig.setWindowedMode(1280, 720);
-    lwjglConfig.useVsync(config.isVsync());
+    lwjglConfig.useVsync(args.isVsync());
 
-    new Lwjgl3Application(new SecutorApp(config), lwjglConfig);
+    // launch app
+    new Lwjgl3Application(new SecutorApp(args), lwjglConfig);
   }
 }
 

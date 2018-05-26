@@ -2,7 +2,7 @@ package com.keenant.secutor;
 
 import com.beust.jcommander.Parameter;
 
-public class SecutorConfig {
+public class SecutorArgs {
   @Parameter(names = {"--host", "-h", "-host"}, description = "Host to bind/connect to")
   private String host;
 
@@ -12,7 +12,7 @@ public class SecutorConfig {
   @Parameter(names = {"--server", "-server"}, description = "Server mode")
   private boolean server;
 
-  @Parameter(names = {"--headless", "-headless"}, description = "Server in headless mode has no player, renders no display")
+  @Parameter(names = {"--headless", "-headless"}, description = "Server in headless mode has no player and renders no display")
   private boolean headless;
 
   @Parameter(names = {"--no-vsync", "-no-vsync"}, description = "Disables vsync")

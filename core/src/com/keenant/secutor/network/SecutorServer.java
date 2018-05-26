@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.esotericsoftware.minlog.Log;
 import com.keenant.secutor.engine.Game;
 import com.keenant.secutor.engine.model.Entity;
 import com.keenant.secutor.engine.model.gladiator.Gladiator;
@@ -14,7 +15,6 @@ import com.keenant.secutor.network.packet.JoinPacket;
 import com.keenant.secutor.network.packet.LeavePacket;
 import com.keenant.secutor.network.packet.LoginPacket;
 import com.keenant.secutor.network.packet.Packet;
-import com.keenant.secutor.network.packet.UpdatePositionPacket;
 import com.keenant.secutor.network.packet.WorldSetupPacket;
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -37,7 +37,7 @@ public class SecutorServer extends Listener implements SecutorEndPoint {
   }
 
   public void start() throws IOException {
-    Packet.register(server);
+    Packet.registerPackets(server);
     server.start();
     if (host != null)
       server.bind(new InetSocketAddress(host, port), null);
@@ -52,10 +52,14 @@ public class SecutorServer extends Listener implements SecutorEndPoint {
 
     server.sendToAllExceptTCP(conn.getID(), new LeavePacket(conn.getUuid()));
 
-    World world = game.getWorld().orElse(null);
-    Entity remove = world.getEntity(conn.getUuid()).orElse(null);
+    Entity remove = game.getWorld().flatMap(world -> world.getEntity(conn.getUuid())).orElse(null);
 
-    world.removeEntity(remove);
+    if (remove == null)
+      return;
+
+    game.getWorld().ifPresent(world -> world.removeEntity(remove));
+
+    Log.info("Secutor", "Client " + remove.getUuid() + " disconnected.");
   }
 
   @Override
@@ -71,9 +75,10 @@ public class SecutorServer extends Listener implements SecutorEndPoint {
 
       // only allow one login
       if (conn.getUuid() == null) {
-        conn.setUuid(packet.uuid);
+        Log.info("Secutor", "Client " + packet.getUuid() + " [" + packet.getName() + "] connecting...");
+        conn.setUuid(packet.getUuid());
 
-        Gladiator newClient = new Gladiator(world, packet.uuid, packet.name);
+        Gladiator newClient = new Gladiator(world, packet.getUuid(), packet.getName());
 
         // send existing world data, and the new client
         connection.sendTCP(WorldSetupPacket.serialize(world, newClient));
@@ -81,6 +86,7 @@ public class SecutorServer extends Listener implements SecutorEndPoint {
         // add new client to server world
         world.addEntity(newClient);
 
+        // send join to clients
         JoinPacket joinPacket = new JoinPacket(GladiatorPacket.serialize(newClient));
         server.sendToAllExceptTCP(conn.getID(), joinPacket);
       }
@@ -94,19 +100,13 @@ public class SecutorServer extends Listener implements SecutorEndPoint {
         Vector2 position = entity.getPosition();
         Vector2 newPosition = packet.getPosition();
         position.set(newPosition.x, newPosition.y);
+
+        if (entity instanceof Gladiator) {
+          ((Gladiator) entity).setFacing(packet.getFacing());
+        }
       }
 
-      server.sendToAllExceptTCP(conn.getID(), object);
-    }
-    else if (object instanceof UpdatePositionPacket) {
-      UpdatePositionPacket packet = (UpdatePositionPacket) object;
-      Entity entity = world.getEntity(packet.uuid).orElse(null);
-
-      if (entity != null) {
-        Gladiator gladiator = (Gladiator) entity;
-        gladiator.setPosition(packet.position.x, packet.position.y);
-      }
-
+      // relay to clients
       server.sendToAllExceptTCP(conn.getID(), object);
     }
   }

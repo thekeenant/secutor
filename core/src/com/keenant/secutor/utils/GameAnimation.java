@@ -2,7 +2,6 @@ package com.keenant.secutor.utils;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.keenant.secutor.animation.GladiatorAnimationState;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
